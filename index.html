@@ -97,7 +97,7 @@ footer{text-align:center;color:#81958d;font-size:11px;padding:15px 18px 30px}
 
 <section id="find" class="screen">
   <div class="head"><button class="back" onclick="show('home')">‹</button><div><p class="eyebrow">In deiner Nähe</p><h2>Pfand finden</h2></div></div>
-  <div class="map"><div class="map-title">🗺️ Pfand in deiner Nähe</div><div id="pins"></div></div>
+  <div id="map" class="map"><div class="map-title">🗺️ Pfand in deiner Nähe</div><div id="pins"></div></div>
   <div class="map-note">🔐 <b>Privatsphäre zuerst:</b> Auf der Karte wird nur ein ungefährer Bereich angezeigt. Der genaue Abholort wird erst nach Zustimmung des Spenders sichtbar.</div>
   <div class="empty"><div class="empty-icon">🍾 🥫</div><h3 id="status">Noch keine Angebote</h3><p>Hier erscheinen Pfand-Angebote, sobald jemand etwas verschenkt.</p><button class="primary" onclick="show('give')">Pfand verschenken</button></div>
 </section>
@@ -108,6 +108,7 @@ footer{text-align:center;color:#81958d;font-size:11px;padding:15px 18px 30px}
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 /* =========================================================
    PFAND-SPENDEN – SUPABASE EINSTELLUNGEN
@@ -315,6 +316,5 @@ if(supabaseClient){
 }
 refreshAuth();
 </script>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </body>
 </html>
