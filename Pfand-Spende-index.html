@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#2f8f68">
+<title>Pfand Spende – Gutes tun</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f7fbf8;color:#17352b}
+button,input,textarea,select{font:inherit}button{cursor:pointer}
+header{height:72px;background:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 18px;box-shadow:0 2px 14px #163c2a12;position:sticky;top:0;z-index:5}
+.brand{display:flex;gap:10px;align-items:center}.logo{font-size:30px}.brand b{display:block}.brand small{color:#719086}
+main{max-width:700px;margin:auto;padding:18px}.screen{display:none}.screen.active{display:block}
+.hero{text-align:center;padding:12px 0 20px}.art{height:180px;border-radius:30px;background:linear-gradient(145deg,#dff4e7,#fff0da);display:flex;align-items:center;justify-content:center;gap:18px;font-size:60px;margin-bottom:22px}.heart{font-size:34px;color:#e87968}
+h1{font-size:42px;line-height:1;margin:0 0 14px;letter-spacing:-.04em}h1 span{color:#e79a4a}.lead{color:#607b70;line-height:1.5;font-size:17px}
+.actions{display:grid;gap:14px}.action{border:0;border-radius:21px;padding:18px;display:grid;grid-template-columns:52px 1fr 20px;text-align:left;align-items:center;box-shadow:0 7px 24px #214a3712}.green{background:#dff4e7}.orange{background:#fff0dc}.action-icon{font-size:30px}.action b{display:block;font-size:18px}.action small{color:#647e73;display:block;margin-top:3px}
+.info{margin-top:18px;background:#fff;border-radius:18px;padding:17px;box-shadow:0 5px 20px #163c2a0b}.info p{color:#698278;font-size:13px;line-height:1.5}
+.head{display:flex;gap:12px;align-items:center;margin:10px 0 18px}.back{border:0;background:#e9f6ee;border-radius:13px;width:44px;height:44px;font-size:29px;color:#287452}.eyebrow{color:#2f8f68;font-weight:800;text-transform:uppercase;letter-spacing:.08em;font-size:11px;margin:0 0 5px}h2{margin:0;font-size:30px}
+.card{background:#fff;border-radius:21px;padding:19px;box-shadow:0 6px 25px #183d2d0c}.form{display:grid;gap:9px}.form label{font-weight:750;margin-top:7px}.form input,.form textarea,.form select{width:100%;border:1px solid #d8e7df;border-radius:13px;padding:13px;background:#fbfdfc}.choices{display:flex;gap:8px;flex-wrap:wrap}.choice{background:#f1f8f4;border-radius:13px;padding:10px}.choice input{width:auto}
+.primary{border:0;background:#2f8f68;color:white;border-radius:14px;padding:13px 18px;font-weight:800;margin-top:10px;width:100%}.privacy{background:#edf8f1;border-radius:15px;padding:13px;margin-top:9px;font-size:13px;color:#61796e;line-height:1.45}
+.map{height:350px;border-radius:23px;position:relative;overflow:hidden;background:#e4efe7;border:1px solid #d5e7dc;background-image:linear-gradient(30deg,transparent 49%,#fff9 50%,transparent 51%),linear-gradient(120deg,transparent 49%,#fff9 50%,transparent 51%),linear-gradient(#c9ddd2 1px,transparent 1px),linear-gradient(90deg,#c9ddd2 1px,transparent 1px);background-size:120px 90px,140px 110px,45px 45px,45px 45px}
+.maplabel{position:absolute;top:12px;left:12px;background:#ffffffe8;padding:9px 12px;border-radius:12px;font-weight:700}.pin{position:absolute;font-size:34px}.note{background:#fff8e8;border-radius:16px;padding:14px;margin-top:12px;color:#76552c;font-size:13px;line-height:1.45}
+footer{padding:25px 18px;color:#80958d;font-size:12px;text-align:center}
+.toast{position:fixed;bottom:20px;left:50%;transform:translate(-50%,120px);background:#183d2e;color:#fff;padding:13px 18px;border-radius:14px;transition:.25s;z-index:20}.toast.show{transform:translate(-50%,0)}
+</style>
+</head>
+<body>
+<header><div class="brand"><div class="logo">♻️</div><div><b>Pfand Spende</b><small>Gutes tun. Gemeinsam.</small></div></div><div>🇩🇪 🇦🇹</div></header>
+<main>
+<section id="home" class="screen active">
+<div class="hero"><div class="art">🧑‍🤝‍🧑 🍾 <span class="heart">♥</span> 🥫</div>
+<p class="eyebrow">Deutschland & Österreich</p><h1>Pfand verschenken.<br><span>Gutes tun.</span></h1>
+<p class="lead">Menschen geben Pfand weiter, andere holen es ab. Einfach, freundlich und gemeinsam.</p></div>
+<div class="actions">
+<button class="action green" onclick="show('give')"><span class="action-icon">🍾</span><span><b>Pfand verschenken</b><small>Gutes tun und Abholung anbieten</small></span><span>›</span></button>
+<button class="action orange" onclick="show('find')"><span class="action-icon">🗺️</span><span><b>Pfand finden</b><small>Pfand in deiner Nähe entdecken</small></span><span>›</span></button>
+</div>
+<div class="info"><b>🔒 Deine Adresse bleibt geschützt</b><p>Zuerst wird nur ein ungefährer Bereich von etwa 200 Metern angezeigt. Die genaue Abholadresse wird erst nach deiner Bestätigung freigegeben.</p></div>
+</section>
+
+<section id="give" class="screen">
+<div class="head"><button class="back" onclick="show('home')">‹</button><div><p class="eyebrow">Teilen statt wegwerfen</p><h2>Pfand verschenken</h2></div></div>
+<div class="card form">
+<label>Was möchtest du verschenken?</label><div class="choices"><label class="choice">🍾 <input type="checkbox" id="bottle" checked> Flaschen</label><label class="choice">🥫 <input type="checkbox" id="can"> Dosen</label></div>
+<label>Adresse</label><input id="address" placeholder="Straße, Hausnummer, Ort">
+<label>Wo kann der Pfand abgeholt werden?</label><textarea id="desc" rows="3" placeholder="z. B. neben der Garage …"></textarea>
+<label>Foto (optional)</label><input type="file" accept="image/*">
+<div class="privacy">🔐 <b>Geschützter Standort:</b> Andere sehen zunächst nur den ungefähren Bereich. Die genaue Adresse wird erst nach bestätigter Abholung freigegeben.</div>
+<button class="primary" onclick="createOffer()">📍 Pfand-Angebot erstellen</button>
+</div></section>
+
+<section id="find" class="screen">
+<div class="head"><button class="back" onclick="show('home')">‹</button><div><p class="eyebrow">In deiner Nähe</p><h2>Pfand finden</h2></div></div>
+<div class="map"><div class="maplabel">🗺️ Karte · ca. 200 m Bereich</div><div id="pins"></div></div>
+<div class="note">🔒 <b>Standortschutz:</b> Der genaue Abholort wird erst sichtbar, wenn der Spender eine Abholanfrage bestätigt.</div>
+<div class="card" style="margin-top:12px;text-align:center"><b id="status">Noch keine Angebote gespeichert.</b><p style="color:#70877d">Erstelle ein Angebot oder teste die Funktion erneut.</p><button class="primary" onclick="show('give')">Erstes Angebot erstellen</button></div>
+</section>
+</main>
+<footer>♻️ Pfand Spende · Mitmachen. Helfen. Teilen.</footer>
+<div id="toast" class="toast"></div>
+<script>
+let offers=JSON.parse(localStorage.getItem('pfand-spende')||'[]');
+function show(id){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');if(id==='find')render();scrollTo(0,0)}
+function toast(t){let x=document.getElementById('toast');x.textContent=t;x.classList.add('show');setTimeout(()=>x.classList.remove('show'),2600)}
+function createOffer(){let types=[];if(bottle.checked)types.push('Flaschen');if(can.checked)types.push('Dosen');if(!types.length||!address.value.trim()){toast('Bitte Pfandart und Adresse angeben.');return}offers.push({types,address:address.value,desc:desc.value});localStorage.setItem('pfand-spende',JSON.stringify(offers));toast('Angebot erstellt – Standort bleibt geschützt.');show('find')}
+function render(){let p=document.getElementById('pins');p.innerHTML='';document.getElementById('status').textContent=offers.length?offers.length+' Pfand-Angebot'+(offers.length>1?'e':'')+' vorhanden.':'Noch keine Angebote gespeichert.';offers.forEach((o,i)=>{let b=document.createElement('button');b.className='pin';b.style.left=(18+(i*31)%68)+'%';b.style.top=(34+(i*29)%45)+'%';b.textContent=o.types.includes('Dosen')?'🥫':'🍾';b.onclick=()=>{toast('Ungefährer Standort ausgewählt. Abholung muss zuerst angefragt werden.')} ;p.appendChild(b)})}
+render();
+</script>
+</body>
+</html>
