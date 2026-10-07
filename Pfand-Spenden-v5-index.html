@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#2D8B68">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Pfand-Spenden">
+<title>Pfand-Spenden – Gemeinsam Gutes tun</title>
+<style>
+:root{--green:#27795f;--green2:#1d604b;--mint:#e4f4ed;--cream:#fffaf1;--orange:#f29a45;--ink:#18382d;--muted:#6b8379;--white:#fff;--line:#dfece5;--danger:#b84b45}
+*{box-sizing:border-box}html{background:#f4f8f5}body{margin:0;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;background:linear-gradient(#f4fbf7 0 38%,#f8faf8 38%);min-height:100vh}
+button,input,textarea,select{font:inherit}button{border:0;cursor:pointer}.app{max-width:760px;margin:auto;min-height:100vh;background:#f8fbf9}
+header{height:74px;background:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 20px;position:sticky;top:0;z-index:10;box-shadow:0 4px 20px #18382d0c}
+.brand{display:flex;align-items:center;gap:10px}.brand-icon{width:43px;height:43px;border-radius:14px;background:var(--green);display:grid;place-items:center;color:#fff;font-size:23px;box-shadow:0 6px 15px #2d8b6830}.brand b{font-size:17px}.brand small{display:block;color:var(--muted);font-size:11px;margin-top:2px}
+.menu{width:43px;height:43px;border-radius:14px;background:var(--mint);color:var(--green);font-size:20px}
+main{padding:18px 18px 38px}.screen{display:none}.screen.active{display:block}
+.hero{position:relative;overflow:hidden;border-radius:30px;background:linear-gradient(145deg,#e4f7eb,#fff2df);padding:24px 20px 26px;min-height:430px;display:flex;flex-direction:column;justify-content:flex-end;box-shadow:0 12px 35px #18382d10}
+.hero:before,.hero:after{content:"";position:absolute;border-radius:50%;opacity:.55}.hero:before{width:190px;height:190px;background:#fff;right:-70px;top:-70px}.hero:after{width:120px;height:120px;background:#ccebd8;left:-55px;top:120px}
+.illustration{position:absolute;inset:15px 15px auto;height:230px;display:flex;align-items:flex-end;justify-content:center;gap:8px;z-index:1}.person{font-size:77px;filter:drop-shadow(0 8px 7px #18382d18)}.person.left{transform:translateY(4px)}.person.right{transform:translateY(12px)}.bottle,.can{font-size:58px;filter:drop-shadow(0 7px 7px #18382d18)}.bottle{transform:rotate(-13deg) translateY(-17px)}.can{transform:rotate(9deg) translateY(-10px)}.heart{position:absolute;top:35px;left:50%;font-size:37px;color:#e47e6f;transform:translateX(-50%)}
+.hero-content{position:relative;z-index:2}.eyebrow{font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:900;color:var(--green);margin:0 0 8px}.hero h1{font-size:clamp(34px,9vw,54px);line-height:.98;letter-spacing:-.045em;margin:0}.hero h1 span{color:#df8c43}.hero p{color:#5d776c;line-height:1.48;margin:13px 0 0;font-size:15px;max-width:540px}
+.actions{display:grid;gap:12px;margin-top:15px}.main-action{width:100%;border-radius:22px;padding:18px 17px;display:grid;grid-template-columns:58px 1fr 25px;align-items:center;text-align:left;box-shadow:0 8px 25px #18382d10;transition:transform .15s}.main-action:active{transform:scale(.985)}.main-action.give{background:#fff0df;color:var(--ink);border:2px solid #f2b36d}.main-action.find{background:linear-gradient(135deg,#27795f,#329774);color:#fff;border:2px solid #27795f}.action-icon{font-size:32px}.main-action b{display:block;font-size:18px}.main-action small{display:block;margin-top:4px;opacity:.78;font-size:12px}.arrow{font-size:28px;font-weight:300}
+.trust{margin-top:15px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:15px 16px;display:flex;gap:12px;align-items:flex-start}.trust-icon{font-size:23px}.trust b{font-size:14px}.trust p{font-size:12px;color:var(--muted);line-height:1.45;margin:4px 0 0}
+.quick{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:13px}.quick-card{background:#fff;border-radius:18px;padding:14px;border:1px solid var(--line)}.quick-card span{font-size:23px}.quick-card b{display:block;margin-top:7px;font-size:13px}.quick-card small{color:var(--muted);line-height:1.35}
+.head{display:flex;gap:12px;align-items:center;margin:5px 0 17px}.back{width:44px;height:44px;border-radius:14px;background:var(--mint);color:var(--green);font-size:29px}.head h2{font-size:29px;margin:0}.head p{margin:0 0 4px}
+.card{background:#fff;border-radius:22px;padding:18px;border:1px solid var(--line);box-shadow:0 8px 25px #18382d08}.form{display:grid;gap:9px}.form label{font-weight:800;font-size:14px;margin-top:5px}.form input,.form textarea,.form select{width:100%;padding:13px 14px;border-radius:14px;border:1px solid #d7e7df;background:#fbfdfc;color:var(--ink);outline:none}.form textarea{resize:vertical}.choices{display:grid;grid-template-columns:1fr 1fr;gap:9px}.choice{padding:13px;border-radius:15px;background:#f1f8f4;border:1px solid #dcece3;font-weight:700}.choice input{width:auto}.privacy{background:#eef8f2;border-radius:15px;padding:13px;color:#557269;font-size:12px;line-height:1.45;margin-top:6px}.primary{width:100%;background:var(--green);color:#fff;padding:14px;border-radius:15px;font-weight:850;font-size:15px;margin-top:7px}.secondary{width:100%;background:#fff1df;color:var(--ink);padding:13px;border-radius:15px;font-weight:800;font-size:14px;margin-top:7px}
+.map{height:370px;border-radius:24px;position:relative;overflow:hidden;background:#e4efe8;border:1px solid #d2e5da;background-image:linear-gradient(30deg,transparent 49%,#fff9 50%,transparent 51%),linear-gradient(120deg,transparent 49%,#fff9 50%,transparent 51%),linear-gradient(#c9ddd2 1px,transparent 1px),linear-gradient(90deg,#c9ddd2 1px,transparent 1px);background-size:130px 100px,150px 115px,45px 45px,45px 45px}.map-title{position:absolute;top:12px;left:12px;background:#ffffffec;border-radius:13px;padding:9px 12px;font-size:12px;font-weight:800}.pin{position:absolute;background:none;font-size:34px;filter:drop-shadow(0 4px 5px #18382d35)}.map-note{margin-top:12px;background:#fff8ea;border-radius:17px;padding:14px;font-size:12px;color:#715630;line-height:1.45}
+.empty{background:#fff;border:1px solid var(--line);border-radius:21px;padding:22px;text-align:center;margin-top:12px}.empty-icon{font-size:38px}.empty h3{margin:8px 0 4px}.empty p{margin:0;color:var(--muted);font-size:13px}
+.auth{background:#fff;border:1px solid var(--line);border-radius:22px;padding:18px;box-shadow:0 8px 25px #18382d08}.tabs{display:grid;grid-template-columns:1fr 1fr;background:#eef7f2;border-radius:14px;padding:4px;margin-bottom:15px}.tab{padding:10px;border-radius:11px;background:transparent;color:var(--muted);font-weight:800}.tab.active{background:#fff;color:var(--green);box-shadow:0 2px 8px #18382d10}.auth-form{display:grid;gap:10px}.auth-form input{width:100%;padding:13px 14px;border-radius:14px;border:1px solid #d7e7df;background:#fbfdfc;color:var(--ink);outline:none}.auth-note{font-size:12px;color:var(--muted);line-height:1.45}.userbar{margin-top:14px;background:#eef8f2;border-radius:16px;padding:13px;display:flex;align-items:center;justify-content:space-between;gap:10px}.userbar b{font-size:13px}.logout{background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 10px;color:var(--green);font-weight:800}
+.toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,140px);background:#18382d;color:#fff;padding:13px 17px;border-radius:14px;z-index:50;transition:.25s;box-shadow:0 10px 30px #18382d40;font-size:13px;max-width:90vw}.toast.show{transform:translate(-50%,0)}
+footer{text-align:center;color:#81958d;font-size:11px;padding:15px 18px 30px}
+.hidden{display:none!important}
+@media(max-width:520px){main{padding:14px 14px 30px}.hero{min-height:405px;padding:21px 17px 23px}.illustration{height:215px}.person{font-size:66px}.bottle,.can{font-size:50px}.quick-card{padding:12px}.quick{gap:8px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <div class="brand"><div class="brand-icon">♻</div><div><b>Pfand-Spenden</b><small>Gemeinsam Gutes tun</small></div></div>
+  <button class="menu" type="button" onclick="openAccount()">👤 Konto</button>
+</header>
+
+<main>
+<section id="home" class="screen active">
+  <div class="hero">
+    <div class="illustration"><div class="person left">🧑</div><div class="bottle">🍾</div><div class="heart">♥</div><div class="can">🥫</div><div class="person right">👩</div></div>
+    <div class="hero-content"><p class="eyebrow">Deutschland & Österreich</p><h1>Pfand finden.<br><span>Gutes tun.</span></h1><p>Finde Pfand in deiner Nähe oder stelle dein eigenes Angebot ein. Einfach, sicher und von Mensch zu Mensch.</p></div>
+  </div>
+  <div class="actions">
+    <button class="main-action find" onclick="show('find')"><span class="action-icon">🗺️</span><span><b>Pfand finden</b><small>Pfand-Angebote in deiner Nähe entdecken</small></span><span class="arrow">›</span></button>
+    <button class="main-action give" onclick="show('give')"><span class="action-icon">🍾</span><span><b>Pfand spenden / einstellen</b><small>Pfand anbieten und anderen eine Freude machen</small></span><span class="arrow">›</span></button>
+  </div>
+  <div class="trust"><span class="trust-icon">🔐</span><div><b>Deine Adresse bleibt geschützt</b><p>Zuerst sehen andere nur einen Bereich von ungefähr 200 Metern. Den genauen Abholort gibst du erst frei, wenn du eine Anfrage bestätigst.</p></div></div>
+  <div class="quick"><div class="quick-card"><span>🤝</span><b>Gemeinsam helfen</b><small>Pfand weitergeben statt wegwerfen.</small></div><div class="quick-card"><span>💚</span><b>Kostenlos dabei</b><small>Die Idee verbindet Menschen.</small></div></div>
+</section>
+
+<section id="account" class="screen">
+  <div class="head"><button class="back" onclick="show('home')">‹</button><div><p class="eyebrow">Dein Konto</p><h2>Pfand-Spenden</h2></div></div>
+  <div id="loggedOut" class="auth">
+    <div class="tabs"><button id="loginTab" class="tab active" type="button" onclick="setAuthMode('login')">Einloggen</button><button id="signupTab" class="tab" type="button" onclick="setAuthMode('signup')">Registrieren</button></div>
+    <form id="authForm" class="auth-form" onsubmit="submitAuth(event)">
+      <div id="nameFields" class="hidden">
+        <input id="firstName" placeholder="Vorname" autocomplete="given-name">
+        <input id="lastName" placeholder="Nachname" autocomplete="family-name">
+      </div>
+      <input id="email" type="email" placeholder="E-Mail-Adresse" autocomplete="email" required>
+      <input id="password" type="password" placeholder="Passwort" autocomplete="current-password" minlength="6" required>
+      <button id="authButton" class="primary" type="submit">Einloggen</button>
+      <p class="auth-note">Mit einem Konto kannst du Pfand-Angebote einstellen und später Abholanfragen verwalten.</p>
+    </form>
+  </div>
+  <div id="loggedIn" class="hidden">
+    <div class="userbar"><div><b id="welcome">Angemeldet</b><div class="auth-note">Dein Konto ist aktiv.</div></div><button class="logout" onclick="logout()">Abmelden</button></div>
+    <div class="card" style="margin-top:12px"><b>Bereit für den nächsten Schritt.</b><p class="auth-note">Als Nächstes verbinden wir Angebote, Karte und Abholanfragen mit deinem Konto.</p></div>
+  </div>
+</section>
+
+<section id="give" class="screen">
+  <div class="head"><button class="back" onclick="show('home')">‹</button><div><p class="eyebrow">Teilen statt wegwerfen</p><h2>Pfand verschenken</h2></div></div>
+  <div id="giveLogin" class="card">
+    <b>Bitte zuerst anmelden.</b>
+    <p class="auth-note">Nur registrierte Nutzer dürfen Pfand-Angebote einstellen.</p>
+    <button class="primary" onclick="show('account');setAuthMode('signup')">Kostenlos registrieren</button>
+  </div>
+  <div id="giveFormCard" class="card form hidden">
+    <label>Was möchtest du verschenken?</label>
+    <div class="choices"><label class="choice">🍾 <input id="bottle" type="checkbox" checked> Flaschen</label><label class="choice">🥫 <input id="can" type="checkbox"> Dosen</label></div>
+    <label>Anzahl Flaschen</label><input id="bottleCount" type="number" min="0" value="0">
+    <label>Anzahl Dosen</label><input id="canCount" type="number" min="0" value="0">
+    <label>Adresse</label><input id="address" placeholder="Straße, Hausnummer, Ort" autocomplete="street-address">
+    <label>Wo kann abgeholt werden?</label><textarea id="desc" rows="3" placeholder="z. B. vor dem Hauseingang, neben der Garage …"></textarea>
+    <div class="privacy">🔒 <b>Geschützter Standort.</b> Die genaue Adresse wird nur für den Anbieter gespeichert und erst nach einer bestätigten Abholanfrage freigegeben.</div>
+    <button class="primary" onclick="createOffer()">📍 Pfand-Angebot einstellen</button>
+  </div>
+</section>
+
+<section id="find" class="screen">
+  <div class="head"><button class="back" onclick="show('home')">‹</button><div><p class="eyebrow">In deiner Nähe</p><h2>Pfand finden</h2></div></div>
+  <div class="map"><div class="map-title">🗺️ Pfand in deiner Nähe</div><div id="pins"></div></div>
+  <div class="map-note">🔐 <b>Privatsphäre zuerst:</b> Auf der Karte wird nur ein ungefährer Bereich angezeigt. Der genaue Abholort wird erst nach Zustimmung des Spenders sichtbar.</div>
+  <div class="empty"><div class="empty-icon">🍾 🥫</div><h3 id="status">Noch keine Angebote</h3><p>Hier erscheinen Pfand-Angebote, sobald jemand etwas verschenkt.</p><button class="primary" onclick="show('give')">Pfand verschenken</button></div>
+</section>
+</main>
+
+<footer>♻ Pfand-Spenden · Mitmachen · Helfen · Teilen</footer>
+<div id="toast" class="toast"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+/* =========================================================
+   PFAND-SPENDEN – SUPABASE EINSTELLUNGEN
+   Die Project URL ist öffentlich. Deinen Publishable Key
+   bitte an der markierten Stelle einsetzen.
+   ========================================================= */
+const SUPABASE_URL = "https://rjtkjesefcxaeftfftus.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "DEIN_PUBLISHABLE_KEY_HIER_EINSETZEN";
+
+let supabaseClient = null;
+if (SUPABASE_PUBLISHABLE_KEY && !SUPABASE_PUBLISHABLE_KEY.includes("DEIN_PUBLISHABLE")) {
+  supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+}
+
+let authMode = "login";
+
+function openAccount(){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  const account=document.getElementById('account');
+  if(account) account.classList.add('active');
+  if(typeof refreshAuth==='function') refreshAuth();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function show(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if(id==='find') renderOffers();
+  if(id==='give') refreshGive();
+  scrollTo({top:0,behavior:'smooth'});
+}
+
+function toast(t){
+  const x=document.getElementById('toast');
+  x.textContent=t;
+  x.classList.add('show');
+  setTimeout(()=>x.classList.remove('show'),3000);
+}
+
+function setAuthMode(mode){
+  authMode=mode;
+  document.getElementById('loginTab').classList.toggle('active',mode==='login');
+  document.getElementById('signupTab').classList.toggle('active',mode==='signup');
+  document.getElementById('nameFields').classList.toggle('hidden',mode!=='signup');
+  document.getElementById('authButton').textContent=mode==='signup'?'Konto erstellen':'Einloggen';
+  document.getElementById('password').autocomplete=mode==='signup'?'new-password':'current-password';
+}
+
+async function submitAuth(event){
+  event.preventDefault();
+  if(!supabaseClient){
+    toast('Der Publishable Key wurde noch nicht in index.html eingetragen.');
+    return;
+  }
+
+  const email=document.getElementById('email').value.trim();
+  const password=document.getElementById('password').value;
+  const button=document.getElementById('authButton');
+  button.disabled=true;
+  button.textContent='Bitte warten …';
+
+  try{
+    if(authMode==='signup'){
+      const first=document.getElementById('firstName').value.trim();
+      const last=document.getElementById('lastName').value.trim();
+      if(!first||!last){toast('Bitte Vorname und Nachname eingeben.');return;}
+
+      const {data,error}=await supabaseClient.auth.signUp({email,password});
+      if(error) throw error;
+      if(data.user){
+        const {error:profileError}=await supabaseClient.from('profiles').insert({
+          id:data.user.id,
+          first_name:first,
+          last_name:last,
+          display_name:first
+        });
+        if(profileError && profileError.code!=='23505') throw profileError;
+      }
+      toast('Konto erstellt. Prüfe ggf. deine E-Mail zur Bestätigung.');
+    }else{
+      const {error}=await supabaseClient.auth.signInWithPassword({email,password});
+      if(error) throw error;
+      toast('Willkommen bei Pfand-Spenden 💚');
+    }
+    await refreshAuth();
+  }catch(error){
+    toast(error.message || 'Anmeldung fehlgeschlagen.');
+  }finally{
+    button.disabled=false;
+    button.textContent=authMode==='signup'?'Konto erstellen':'Einloggen';
+  }
+}
+
+async function logout(){
+  if(supabaseClient) await supabaseClient.auth.signOut();
+  await refreshAuth();
+  toast('Du bist abgemeldet.');
+}
+
+async function refreshAuth(){
+  let user=null;
+  if(supabaseClient){
+    const {data}=await supabaseClient.auth.getUser();
+    user=data?.user||null;
+  }
+
+  document.getElementById('loggedOut').classList.toggle('hidden',!!user);
+  document.getElementById('loggedIn').classList.toggle('hidden',!user);
+  document.getElementById('giveLogin').classList.toggle('hidden',!!user);
+  document.getElementById('giveFormCard').classList.toggle('hidden',!user);
+
+  if(user){
+    let name=user.email||'Angemeldet';
+    const {data:profile}=await supabaseClient.from('profiles').select('first_name,last_name').eq('id',user.id).maybeSingle();
+    if(profile?.first_name) name=profile.first_name+' '+(profile.last_name||'');
+    document.getElementById('welcome').textContent='Hallo '+name.trim()+' 👋';
+  }
+}
+
+async function createOffer(){
+  if(!supabaseClient){toast('Supabase ist noch nicht verbunden.');return;}
+  const {data:{user}}=await supabaseClient.auth.getUser();
+  if(!user){show('account');setAuthMode('signup');return;}
+
+  const bottleCount=Math.max(0,parseInt(document.getElementById('bottleCount').value||0,10));
+  const canCount=Math.max(0,parseInt(document.getElementById('canCount').value||0,10));
+  const address=document.getElementById('address').value.trim();
+  const desc=document.getElementById('desc').value.trim();
+
+  if((bottleCount+canCount)<=0){toast('Bitte mindestens eine Flasche oder Dose angeben.');return;}
+  if(!address){toast('Bitte die genaue Adresse eingeben.');return;}
+
+  const {data:offer,error}=await supabaseClient.from('offers').insert({
+    owner_id:user.id,
+    title:'Pfand verschenken',
+    description:desc,
+    bottle_count:bottleCount,
+    can_count:canCount,
+    approx_lat:0,
+    approx_lng:0,
+    pickup_description:desc,
+    status:'active'
+  }).select().single();
+
+  if(error){toast(error.message);return;}
+
+  const {error:addressError}=await supabaseClient.from('offer_addresses').insert({
+    offer_id:offer.id,
+    street:address,
+    house_number:'',
+    postal_code:'',
+    city:''
+  });
+
+  if(addressError){
+    await supabaseClient.from('offers').delete().eq('id',offer.id);
+    toast(addressError.message);
+    return;
+  }
+
+  document.getElementById('address').value='';
+  document.getElementById('desc').value='';
+  document.getElementById('bottleCount').value='0';
+  document.getElementById('canCount').value='0';
+  toast('Dein Pfand-Angebot wurde gespeichert 💚');
+  show('find');
+}
+
+async function renderOffers(){
+  const pins=document.getElementById('pins');
+  pins.innerHTML='';
+  if(!supabaseClient){
+    document.getElementById('status').textContent='Supabase noch nicht verbunden';
+    return;
+  }
+
+  const {data,error}=await supabaseClient
+    .from('offers')
+    .select('id,bottle_count,can_count,status')
+    .eq('status','active');
+
+  if(error){document.getElementById('status').textContent='Angebote konnten nicht geladen werden.';return;}
+
+  document.getElementById('status').textContent=data.length
+    ? data.length+' Pfand-Angebot'+(data.length>1?'e':'')+' vorhanden.'
+    : 'Noch keine Angebote';
+
+  data.forEach((o,i)=>{
+    const b=document.createElement('button');
+    b.className='pin';
+    b.style.left=(16+(i*29)%70)+'%';
+    b.style.top=(32+(i*31)%48)+'%';
+    b.textContent=(o.can_count||0)>(o.bottle_count||0)?'🥫':'🍾';
+    b.onclick=()=>toast('Ungefährer Bereich. Der genaue Abholort wird erst nach Zustimmung freigegeben.');
+    pins.appendChild(b);
+  });
+}
+
+async function refreshGive(){
+  await refreshAuth();
+}
+
+if(supabaseClient){
+  supabaseClient.auth.onAuthStateChange(()=>refreshAuth());
+}
+refreshAuth();
+</script>
+</body>
+</html>
