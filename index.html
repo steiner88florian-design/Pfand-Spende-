@@ -315,6 +315,17 @@ if(supabaseClient){
   supabaseClient.auth.onAuthStateChange(()=>refreshAuth());
 }
 refreshAuth();
+let leafletMap=null;
+
+function initMap(){
+  if(leafletMap || typeof L==='undefined') return;
+
+  leafletMap=L.map('map').setView([51.1657,10.4515],6);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+    attribution:'© OpenStreetMap'
+  }).addTo(leafletMap);
+}
 </script>
 </body>
 </html>
