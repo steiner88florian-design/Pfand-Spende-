@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#2D8B68">
+<title>Pfand Spende – Gemeinsam Gutes tun</title>
+<style>
+:root{--green:#2d8b68;--green2:#1f6f52;--mint:#e7f6ed;--cream:#fffaf1;--orange:#efa15a;--ink:#18382d;--muted:#6b8379;--white:#fff;--line:#dfece5}
+*{box-sizing:border-box}html{background:#f4f8f5}body{margin:0;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;background:linear-gradient(#f4fbf7 0 38%,#f8faf8 38%);min-height:100vh}
+button,input,textarea,select{font:inherit}button{border:0}.app{max-width:760px;margin:auto;min-height:100vh;background:#f8fbf9}
+header{height:74px;background:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 20px;position:sticky;top:0;z-index:10;box-shadow:0 4px 20px #18382d0c}.brand{display:flex;align-items:center;gap:10px}.brand-icon{width:43px;height:43px;border-radius:14px;background:var(--green);display:grid;place-items:center;color:#fff;font-size:23px;box-shadow:0 6px 15px #2d8b6830}.brand b{font-size:17px}.brand small{display:block;color:var(--muted);font-size:11px;margin-top:2px}.menu{width:43px;height:43px;border-radius:14px;background:var(--mint);color:var(--green);font-size:20px}
+main{padding:18px 18px 38px}.screen{display:none}.screen.active{display:block}
+.hero{position:relative;overflow:hidden;border-radius:30px;background:linear-gradient(145deg,#e4f7eb,#fff2df);padding:24px 20px 26px;min-height:430px;display:flex;flex-direction:column;justify-content:flex-end;box-shadow:0 12px 35px #18382d10}
+.hero:before,.hero:after{content:"";position:absolute;border-radius:50%;opacity:.55}.hero:before{width:190px;height:190px;background:#fff;right:-70px;top:-70px}.hero:after{width:120px;height:120px;background:#ccebd8;left:-55px;top:120px}
+.illustration{position:absolute;inset:15px 15px auto;height:230px;display:flex;align-items:flex-end;justify-content:center;gap:8px;z-index:1}.person{font-size:77px;filter:drop-shadow(0 8px 7px #18382d18)}.person.left{transform:translateY(4px)}.person.right{transform:translateY(12px)}.bottle,.can{font-size:58px;filter:drop-shadow(0 7px 7px #18382d18)}.bottle{transform:rotate(-13deg) translateY(-17px)}.can{transform:rotate(9deg) translateY(-10px)}.heart{position:absolute;top:35px;left:50%;font-size:37px;color:#e47e6f;transform:translateX(-50%)}
+.hero-content{position:relative;z-index:2}.eyebrow{font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:900;color:var(--green);margin:0 0 8px}.hero h1{font-size:clamp(34px,9vw,54px);line-height:.98;letter-spacing:-.045em;margin:0}.hero h1 span{color:#df8c43}.hero p{color:#5d776c;line-height:1.48;margin:13px 0 0;font-size:15px;max-width:540px}
+.actions{display:grid;gap:12px;margin-top:15px}.main-action{width:100%;border-radius:22px;padding:18px 17px;display:grid;grid-template-columns:58px 1fr 25px;align-items:center;text-align:left;box-shadow:0 8px 25px #18382d10;transition:transform .15s}.main-action:active{transform:scale(.985)}.main-action.give{background:var(--green);color:#fff}.main-action.find{background:#fff1df;color:var(--ink)}.action-icon{font-size:32px}.main-action b{display:block;font-size:18px}.main-action small{display:block;margin-top:4px;opacity:.78;font-size:12px}.arrow{font-size:28px;font-weight:300}
+.trust{margin-top:15px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:15px 16px;display:flex;gap:12px;align-items:flex-start}.trust-icon{font-size:23px}.trust b{font-size:14px}.trust p{font-size:12px;color:var(--muted);line-height:1.45;margin:4px 0 0}
+.quick{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:13px}.quick-card{background:#fff;border-radius:18px;padding:14px;border:1px solid var(--line)}.quick-card span{font-size:23px}.quick-card b{display:block;margin-top:7px;font-size:13px}.quick-card small{color:var(--muted);line-height:1.35}
+.head{display:flex;gap:12px;align-items:center;margin:5px 0 17px}.back{width:44px;height:44px;border-radius:14px;background:var(--mint);color:var(--green);font-size:29px}.head h2{font-size:29px;margin:0}.head p{margin:0 0 4px}
+.card{background:#fff;border-radius:22px;padding:18px;border:1px solid var(--line);box-shadow:0 8px 25px #18382d08}.form{display:grid;gap:9px}.form label{font-weight:800;font-size:14px;margin-top:5px}.form input,.form textarea,.form select{width:100%;padding:13px 14px;border-radius:14px;border:1px solid #d7e7df;background:#fbfdfc;color:var(--ink);outline:none}.form textarea{resize:vertical}.choices{display:grid;grid-template-columns:1fr 1fr;gap:9px}.choice{padding:13px;border-radius:15px;background:#f1f8f4;border:1px solid #dcece3;font-weight:700}.choice input{width:auto}.privacy{background:#eef8f2;border-radius:15px;padding:13px;color:#557269;font-size:12px;line-height:1.45;margin-top:6px}.primary{width:100%;background:var(--green);color:#fff;padding:14px;border-radius:15px;font-weight:850;font-size:15px;margin-top:7px}.map{height:370px;border-radius:24px;position:relative;overflow:hidden;background:#e4efe8;border:1px solid #d2e5da;background-image:linear-gradient(30deg,transparent 49%,#fff9 50%,transparent 51%),linear-gradient(120deg,transparent 49%,#fff9 50%,transparent 51%),linear-gradient(#c9ddd2 1px,transparent 1px),linear-gradient(90deg,#c9ddd2 1px,transparent 1px);background-size:130px 100px,150px 115px,45px 45px,45px 45px}.map-title{position:absolute;top:12px;left:12px;background:#ffffffec;border-radius:13px;padding:9px 12px;font-size:12px;font-weight:800}.pin{position:absolute;background:none;font-size:34px;filter:drop-shadow(0 4px 5px #18382d35)}.map-note{margin-top:12px;background:#fff8ea;border-radius:17px;padding:14px;font-size:12px;color:#715630;line-height:1.45}.empty{background:#fff;border:1px solid var(--line);border-radius:21px;padding:22px;text-align:center;margin-top:12px}.empty-icon{font-size:38px}.empty h3{margin:8px 0 4px}.empty p{margin:0;color:var(--muted);font-size:13px}.toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,140px);background:#18382d;color:#fff;padding:13px 17px;border-radius:14px;z-index:50;transition:.25s;box-shadow:0 10px 30px #18382d40;font-size:13px}.toast.show{transform:translate(-50%,0)}footer{text-align:center;color:#81958d;font-size:11px;padding:15px 18px 30px}
+@media(max-width:520px){main{padding:14px 14px 30px}.hero{min-height:405px;padding:21px 17px 23px}.illustration{height:215px}.person{font-size:66px}.bottle,.can{font-size:50px}.quick-card{padding:12px}.quick{gap:8px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header><div class="brand"><div class="brand-icon">♻</div><div><b>Pfand Spende</b><small>Gemeinsam Gutes tun</small></div></div><button class="menu" onclick="toast('Menü folgt in der nächsten Version')">☰</button></header>
+<main>
+<section id="home" class="screen active">
+<div class="hero">
+<div class="illustration"><div class="person left">🧑</div><div class="bottle">🍾</div><div class="heart">♥</div><div class="can">🥫</div><div class="person right">👩</div></div>
+<div class="hero-content"><p class="eyebrow">Deutschland & Österreich</p><h1>Pfand verschenken.<br><span>Gutes tun.</span></h1><p>Du hast Pfand übrig? Verschenke es an Menschen in deiner Nähe. Einfach, sicher und von Mensch zu Mensch.</p></div>
+</div>
+<div class="actions">
+<button class="main-action give" onclick="show('give')"><span class="action-icon">🍾</span><span><b>Pfand verschenken</b><small>Pfand anbieten und anderen eine Freude machen</small></span><span class="arrow">›</span></button>
+<button class="main-action find" onclick="show('find')"><span class="action-icon">🗺️</span><span><b>Pfand finden</b><small>Pfand-Angebote in deiner Nähe entdecken</small></span><span class="arrow">›</span></button>
+</div>
+<div class="trust"><span class="trust-icon">🔐</span><div><b>Deine Adresse bleibt geschützt</b><p>Zuerst sehen andere nur einen Bereich von ungefähr 200 Metern. Den genauen Abholort gibst du erst frei, wenn du eine Anfrage bestätigst.</p></div></div>
+<div class="quick"><div class="quick-card"><span>🤝</span><b>Gemeinsam helfen</b><small>Pfand weitergeben statt wegwerfen.</small></div><div class="quick-card"><span>💚</span><b>Kostenlos dabei</b><small>Die Idee verbindet Menschen.</small></div></div>
+</section>
+
+<section id="give" class="screen">
+<div class="head"><button class="back" onclick="show('home')">‹</button><div><p class="eyebrow">Teilen statt wegwerfen</p><h2>Pfand verschenken</h2></div></div>
+<div class="card form"><label>Was möchtest du verschenken?</label><div class="choices"><label class="choice">🍾 <input id="bottle" type="checkbox" checked> Flaschen</label><label class="choice">🥫 <input id="can" type="checkbox"> Dosen</label></div><label>Adresse</label><input id="address" placeholder="Straße, Hausnummer, Ort"><label>Wo kann abgeholt werden?</label><textarea id="desc" rows="3" placeholder="z. B. vor dem Hauseingang, neben der Garage …"></textarea><label>Foto (optional)</label><input type="file" accept="image/*"><div class="privacy">🔒 <b>Geschützter Standort.</b> Die genaue Adresse wird erst nach einer bestätigten Abholanfrage freigegeben.</div><button class="primary" onclick="createOffer()">📍 Pfand-Angebot einstellen</button></div>
+</section>
+
+<section id="find" class="screen">
+<div class="head"><button class="back" onclick="show('home')">‹</button><div><p class="eyebrow">In deiner Nähe</p><h2>Pfand finden</h2></div></div>
+<div class="map"><div class="map-title">🗺️ Pfand in deiner Nähe</div><div id="pins"></div></div>
+<div class="map-note">🔐 <b>Privatsphäre zuerst:</b> Auf der Karte wird nur ein ungefährer Bereich angezeigt. Der genaue Abholort wird erst nach Zustimmung des Spenders sichtbar.</div>
+<div class="empty"><div class="empty-icon">🍾 🥫</div><h3 id="status">Noch keine Angebote</h3><p>Hier erscheinen Pfand-Angebote, sobald jemand etwas verschenkt.</p><button class="primary" onclick="show('give')">Pfand verschenken</button></div>
+</section>
+</main>
+<footer>♻ Pfand Spende · Mitmachen · Helfen · Teilen</footer>
+<div id="toast" class="toast"></div>
+</div>
+<script>
+let offers=JSON.parse(localStorage.getItem('pfand-spende')||'[]');
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');if(id==='find')render();scrollTo({top:0,behavior:'smooth'})}
+function toast(t){let x=document.getElementById('toast');x.textContent=t;x.classList.add('show');setTimeout(()=>x.classList.remove('show'),2700)}
+function createOffer(){let types=[];if(document.getElementById('bottle').checked)types.push('Flaschen');if(document.getElementById('can').checked)types.push('Dosen');let a=document.getElementById('address').value.trim();if(!types.length||!a){toast('Bitte Pfandart und Adresse angeben.');return}offers.push({types,address:a,desc:document.getElementById('desc').value});localStorage.setItem('pfand-spende',JSON.stringify(offers));toast('Dein Pfand-Angebot wurde eingestellt 💚');show('find')}
+function render(){let pins=document.getElementById('pins');pins.innerHTML='';document.getElementById('status').textContent=offers.length?offers.length+' Pfand-Angebot'+(offers.length>1?'e':'')+' vorhanden.':'Noch keine Angebote';offers.forEach((o,i)=>{let b=document.createElement('button');b.className='pin';b.style.left=(16+(i*29)%70)+'%';b.style.top=(32+(i*31)%48)+'%';b.textContent=o.types.includes('Dosen')?'🥫':'🍾';b.onclick=()=>toast('Ungefährer Standort. Abholung wird in der nächsten Version angefragt.');pins.appendChild(b)})}
+render();
+</script>
+</body>
+</html>
