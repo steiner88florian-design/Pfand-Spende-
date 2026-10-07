@@ -278,6 +278,10 @@ async function createOffer(){
 }
 
 async function renderOffers(){
+  if(typeof initMap==='function'){
+    initMap();
+    setTimeout(()=>leafletMap?.invalidateSize(),50);
+  }
   const pins=document.getElementById('pins');
   pins.innerHTML='';
   if(!supabaseClient){
