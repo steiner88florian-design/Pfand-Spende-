@@ -384,7 +384,7 @@ L.circle([lat, lng], {
 }).addTo(leafletMap);
   },
   error => {
-  toast('Standort konnte nicht ermittelt werden: ' + error.message);
+  toast('Standortfehler Code: ' + error.code);
 },
   {
     enableHighAccuracy: false,
