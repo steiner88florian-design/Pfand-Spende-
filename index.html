@@ -365,18 +365,36 @@ const marker=L.marker([o.approx_lat,o.approx_lng],{
   })
 }).addTo(leafletMap);
 
-  marker.on('click',()=>{
-  const flaschen=o.bottle_count||0;
-  const dosen=o.can_count||0;
+  marker.bindPopup(`
+  <div style="min-width:210px;text-align:center;">
+    <div style="font-size:18px;font-weight:700;margin-bottom:8px;">
+      🍾 ${o.bottle_count||0} Flaschen · 🥤 ${o.can_count||0} Dosen
+    </div>
 
-  const text=
-    '🍾 '+flaschen+' Flaschen\n'+
-    '🥤 '+dosen+' Dosen\n\n'+
-    '🔒 Ungefährer Bereich.\n'+
-    'Der genaue Abholort wird erst nach Zustimmung des Spenders freigegeben.';
+    <div style="font-size:13px;margin-bottom:12px;">
+      🔒 Ungefährer Bereich<br>
+      Der genaue Abholort wird erst nach Zustimmung des Spenders freigegeben.
+    </div>
 
-  toast(text);
-});
+    <button
+      onclick="requestPickup('${o.id}')"
+      style="width:100%;padding:10px;border:0;border-radius:10px;background:#198c3a;color:white;font-weight:700;">
+      Abholung anfragen
+    </button>
+  </div>
+`);
+  async function requestPickup(offerId){
+  const {data:{user}}=await supabaseClient.auth.getUser();
+
+  if(!user){
+    show('account');
+    setAuthMode('signin');
+    toast('Bitte anmelden oder registrieren, um eine Abholung anzufragen.');
+    return;
+  }
+
+  toast('Abholanfrage wird vorbereitet.');
+}
 });
 }
 
