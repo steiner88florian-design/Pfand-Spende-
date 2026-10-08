@@ -335,16 +335,35 @@ async function renderOffers(){
 data.forEach((o)=>{
   if(!o.approx_lat || !o.approx_lng) return;
 
-  const icon=(o.can_count||0)>(o.bottle_count||0)?'🥫':'🧺🍾🍾';
+ const isCan=(o.can_count||0)>(o.bottle_count||0);
 
-  const marker=L.marker([o.approx_lat,o.approx_lng],{
-    icon:L.divIcon({
-      className:'',
-      html:'<div style="font-size:34px;filter:drop-shadow(0 3px 4px #18382d55);">'+icon+'</div>',
-      iconSize:[40,40],
-      iconAnchor:[20,40]
-    })
-  }).addTo(leafletMap);
+const markerSvg=isCan
+  ? `<svg width="48" height="58" viewBox="0 0 48 58" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="24" cy="55" rx="14" ry="3" fill="#00000022"/>
+      <rect x="10" y="8" width="28" height="43" rx="7" fill="#d92f2f" stroke="white" stroke-width="4"/>
+      <ellipse cx="24" cy="9" rx="14" ry="5" fill="#d9d9d9" stroke="white" stroke-width="3"/>
+      <ellipse cx="24" cy="9" rx="9" ry="2.5" fill="#777"/>
+      <path d="M15 30 C20 25 28 35 34 28" fill="none" stroke="white" stroke-width="4"/>
+    </svg>`
+  : `<svg width="48" height="62" viewBox="0 0 48 62" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="24" cy="59" rx="13" ry="3" fill="#00000022"/>
+      <path d="M18 12 L18 7 Q18 4 21 4 L27 4 Q30 4 30 7 L30 12
+               Q36 16 37 23 L37 50 Q37 56 31 57 L17 57 Q11 56 11 50
+               L11 23 Q12 16 18 12Z"
+            fill="#198c3a" stroke="white" stroke-width="4"/>
+      <path d="M17 27 Q24 23 31 27 L31 43 Q24 47 17 43Z"
+            fill="#f4e5bd" opacity=".95"/>
+      <rect x="18" y="3" width="12" height="6" rx="2" fill="#c49a45"/>
+    </svg>`;
+
+const marker=L.marker([o.approx_lat,o.approx_lng],{
+  icon:L.divIcon({
+    className:'',
+    html:`<div style="filter:drop-shadow(0 3px 4px #18382d55);">${markerSvg}</div>`,
+    iconSize:[48,62],
+    iconAnchor:[24,62]
+  })
+}).addTo(leafletMap);
 
   marker.on('click',()=>{
     toast('🔒 Ungefährer Bereich. Der genaue Abholort wird erst nach Zustimmung des Spenders freigegeben.');
