@@ -389,9 +389,36 @@ const marker=L.marker([o.approx_lat,o.approx_lng],{
   if(!user){
     show('account');
     setAuthMode('signin');
-    toast('Bitte anmelden oder registrieren, um eine Abholung anzufragen.');
+    toast('Bitte anmelden oder registrieren.');
     return;
   }
+
+  const requestedDate=prompt('Für welchen Tag möchtest du die Abholung? (z.B. 2026-10-09)');
+  if(!requestedDate) return;
+
+  const timeOfDay=prompt('Wann passt es? Vormittag, Nachmittag oder Abend');
+  if(!timeOfDay) return;
+
+  const message=prompt('Nachricht an den Spender (optional):') || '';
+
+  const {error}=await supabaseClient
+    .from('pickup_requests')
+    .insert({
+      offer_id:offerId,
+      requester_id:user.id,
+      requested_date:requestedDate,
+      time_of_day:timeOfDay,
+      message:message,
+      status:'pending'
+    });
+
+  if(error){
+    toast('Abholanfrage konnte nicht gesendet werden.');
+    return;
+  }
+
+  toast('✅ Abholanfrage wurde gesendet.');
+}
 
   toast('Abholanfrage wird vorbereitet.');
 }
