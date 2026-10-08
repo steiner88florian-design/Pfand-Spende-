@@ -323,7 +323,7 @@ async function renderOffers(){
 
   const {data,error}=await supabaseClient
     .from('offers')
-    .select('id,bottle_count,can_count,status')
+    .select('id,bottle_count,can_count,approx_lat,approx_lng,status')
     .eq('status','active');
 
   if(error){document.getElementById('status').textContent='Angebote konnten nicht geladen werden.';return;}
@@ -332,16 +332,25 @@ async function renderOffers(){
     ? data.length+' Pfand-Angebot'+(data.length>1?'e':'')+' vorhanden.'
     : 'Noch keine Angebote';
 
-  data.forEach((o,i)=>{
-    const b=document.createElement('button');
-    b.className='pin';
-    b.style.left=(16+(i*29)%70)+'%';
-    b.style.top=(32+(i*31)%48)+'%';
-    b.textContent=(o.can_count||0)>(o.bottle_count||0)?'🥫':'🍾';
-    b.onclick=()=>toast('Ungefährer Bereich. Der genaue Abholort wird erst nach Zustimmung freigegeben.');
-    pins.appendChild(b);
+data.forEach((o)=>{
+  if(!o.approx_lat || !o.approx_lng) return;
+
+  const icon=(o.can_count||0)>(o.bottle_count||0)?'🥫':'🍾';
+
+  const marker=L.marker([o.approx_lat,o.approx_lng],{
+    icon:L.divIcon({
+      className:'',
+      html:'<div style="font-size:34px;filter:drop-shadow(0 3px 4px #18382d55);">'+icon+'</div>',
+      iconSize:[40,40],
+      iconAnchor:[20,40]
+    })
+  }).addTo(leafletMap);
+
+  marker.on('click',()=>{
+    toast('🔒 Ungefährer Bereich. Der genaue Abholort wird erst nach Zustimmung des Spenders freigegeben.');
   });
-}
+});
+
 
 async function refreshGive(){
   await refreshAuth();
