@@ -335,7 +335,7 @@ async function renderOffers(){
 data.forEach((o)=>{
   if(!o.approx_lat || !o.approx_lng) return;
 
-  const icon=(o.can_count||0)>(o.bottle_count||0)?'🥫':'🍾';
+  const icon=(o.can_count||0)>(o.bottle_count||0)?'🥫':'🧺🍾🍾';
 
   const marker=L.marker([o.approx_lat,o.approx_lng],{
     icon:L.divIcon({
