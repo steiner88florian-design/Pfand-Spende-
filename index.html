@@ -382,6 +382,9 @@ function initMap(){
 L.circle([lat, lng], {
   radius: 200
 }).addTo(leafletMap);
+   L.circleMarker([lat, lng], {
+  radius: 7
+}).addTo(leafletMap);
   },
   error => {
   toast('Standortfehler Code: ' + error.code);
