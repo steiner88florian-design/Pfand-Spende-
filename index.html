@@ -88,7 +88,7 @@ footer{text-align:center;color:#81958d;font-size:11px;padding:15px 18px 30px}
     <div class="choices"><label class="choice">🍾 <input id="bottle" type="checkbox" checked> Flaschen</label><label class="choice">🥫 <input id="can" type="checkbox"> Dosen</label></div>
     <label>Anzahl Flaschen</label><input id="bottleCount" type="number" min="0" value="0">
     <label>Anzahl Dosen</label><input id="canCount" type="number" min="0" value="0">
-    <label>Adresse</label><input id="address" placeholder="Straße, Hausnummer, Ort" autocomplete="street-address">
+    <label>Adresse</label><input id="address" placeholder="Straße, Hausnummer" autocomplete="street-address"><input id="postalCode" placeholder="PLZ" inputmode="numeric" autocomplete="postal-code"><input id="city" placeholder="Ort" autocomplete="address-level2">
     <label>Wo kann abgeholt werden?</label><textarea id="desc" rows="3" placeholder="z. B. vor dem Hauseingang, neben der Garage …"></textarea>
     <div class="privacy">🔒 <b>Geschützter Standort.</b> Die genaue Adresse wird nur für den Anbieter gespeichert und erst nach einer bestätigten Abholanfrage freigegeben.</div>
     <button class="primary" onclick="createOffer()">📍 Pfand-Angebot einstellen</button>
@@ -236,6 +236,8 @@ async function createOffer(){
   const bottleCount=Math.max(0,parseInt(document.getElementById('bottleCount').value||0,10));
   const canCount=Math.max(0,parseInt(document.getElementById('canCount').value||0,10));
   const address=document.getElementById('address').value.trim();
+  const postalCode=document.getElementById('postalCode').value.trim();
+const city=document.getElementById('city').value.trim();
   const desc=document.getElementById('desc').value.trim();
 
   if((bottleCount+canCount)<=0){toast('Bitte mindestens eine Flasche oder Dose angeben.');return;}
