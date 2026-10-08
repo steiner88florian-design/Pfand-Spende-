@@ -374,6 +374,22 @@ function initMap(){
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
     attribution:'© OpenStreetMap'
   }).addTo(leafletMap);
+ navigator.geolocation.getCurrentPosition(
+  position => {
+    const lat = position.coords.latitude;
+    const lng = position.coords.longitude;
+    leafletMap.setView([lat, lng], 13);
+L.circle([lat, lng], {
+  radius: 200
+}).addTo(leafletMap);
+  },
+  () => {},
+  {
+    enableHighAccuracy: false,
+    timeout: 8000,
+    maximumAge: 300000
+  }
+);
 }
 </script>
 </body>
