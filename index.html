@@ -985,12 +985,21 @@ Pfand verschenken
     <textarea id="findDescription" rows="3" maxlength="500" placeholder="z. B. am Weg neben einer Parkbank"></textarea>
     <label for="findLocationText">Ort oder ungefähre Adresse</label>
     <input id="findLocationText" placeholder="Straße, Park, Ort oder Treffpunkt" required>
-    <button type="button" class="secondary" onclick="locateFindText()">📍 Ort auf Karte finden</button>
+    <button type="button" class="secondary" onclick="useCurrentFindLocation()">📍 Meinen Standort verwenden</button>
+    <button type="button" class="secondary" onclick="locateFindText()">Ort oder Adresse suchen</button>
+    <p id="findLocationStatus" class="find-form-note">Beim Öffnen wird dein Standort angefragt. Du kannst ihn auch manuell auf der Karte setzen.</p>
     <div id="findPickMap" class="find-map-pick"></div>
     <p class="find-form-note">Tippe auf die Karte, um den ungefähren Fundort festzulegen. Bitte keine privaten Wohnadressen melden.</p>
     <label for="findPhoto">Foto (optional)</label>
     <input id="findPhoto" type="file" accept="image/*" capture="environment">
-    <p class="find-form-note">Bitte keine erkennbaren Gesichter oder Kennzeichen fotografieren. Maximal 5 MB.</p>
+    <div class="find-form-note" style="background:#eef8f2;padding:12px;border-radius:14px">
+      <b>Bildrechte und Privatsphäre</b><br>
+      Lade nur Fotos hoch, die du selbst aufgenommen hast oder für deren Nutzung du die erforderlichen Rechte besitzt. Fotografiere möglichst nur den Pfandfund. Vermeide erkennbare Personen, Kfz-Kennzeichen und private Bereiche. Ein Upload hebt fremde Urheber- oder Persönlichkeitsrechte nicht auf. Fotos werden nicht öffentlich angezeigt, solange die Fotoanzeige nicht ausdrücklich eingerichtet ist. Maximal 5 MB.
+    </div>
+    <label class="choice" style="display:flex;gap:9px;align-items:flex-start">
+      <input id="findPhotoRightsAgree" type="checkbox" style="width:auto;margin-top:3px">
+      <span>Ich bestätige, dass ich dieses Foto hochladen darf und keine unnötigen personenbezogenen Daten sichtbar sind.</span>
+    </label>
     <label for="findReporter">Name (optional)</label>
     <input id="findReporter" maxlength="60" placeholder="Anzeigename – optional">
     <label class="choice" style="display:flex;gap:9px;align-items:flex-start">
@@ -2260,13 +2269,46 @@ let findMap = null, findMarker = null, findCoordinates = null;
 const findPhotoBucket = "pfand-find-photos";
 
 function initFindMap() {
-  if (typeof L === "undefined") { toast("Die Karte konnte nicht geladen werden."); return; }
-  if (findMap) { setTimeout(() => findMap.invalidateSize(), 100); return; }
+  if (typeof L === "undefined") {
+    const status = document.getElementById("findLocationStatus");
+    if (status) status.textContent = "Die Kartenbibliothek konnte nicht geladen werden. Bitte Internetverbindung prüfen.";
+    toast("Die Karte konnte nicht geladen werden.");
+    return;
+  }
+  if (findMap) {
+    setTimeout(() => findMap.invalidateSize(), 150);
+    return;
+  }
   findMap = L.map("findPickMap").setView([47.5, 10.5], 5);
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution: "© OpenStreetMap contributors"
   }).addTo(findMap);
   findMap.on("click", e => setFindMarker(e.latlng.lat, e.latlng.lng));
+  setTimeout(() => findMap.invalidateSize(), 150);
+  // Ask for location only when the user opens the marking screen.
+  useCurrentFindLocation(true);
+}
+function useCurrentFindLocation(silent = false) {
+  const status = document.getElementById("findLocationStatus");
+  if (!navigator.geolocation) {
+    if (status) status.textContent = "Dein Browser unterstützt keine Standortbestimmung. Tippe direkt auf die Karte.";
+    return;
+  }
+  if (status) status.textContent = "Standort wird gesucht …";
+  navigator.geolocation.getCurrentPosition(position => {
+    const lat = position.coords.latitude;
+    const lng = position.coords.longitude;
+    if (!findMap) initFindMap();
+    if (!findMap) return;
+    findMap.setView([lat, lng], 16);
+    setFindMarker(lat, lng);
+    if (status) status.textContent = "Standort übernommen. Du kannst den Marker durch Tippen auf die Karte verschieben.";
+  }, error => {
+    let message = "Standort nicht verfügbar. Tippe auf die Karte oder suche eine Adresse.";
+    if (error.code === 1) message = "Standortfreigabe abgelehnt. Tippe auf die Karte oder suche eine Adresse.";
+    if (status) status.textContent = message;
+    if (!silent) toast(message);
+  }, {enableHighAccuracy:false, timeout:10000, maximumAge:120000});
 }
 function setFindMarker(lat, lng) {
   findCoordinates = {lat:Number(lat), lng:Number(lng)};
@@ -2311,6 +2353,9 @@ async function submitFind() {
     };
     const file = document.getElementById("findPhoto").files?.[0];
     if (file) {
+      if (!document.getElementById("findPhotoRightsAgree").checked) {
+        throw new Error("Bitte bestätige zuerst den Hinweis zu Bildrechten und Privatsphäre.");
+      }
       if (!file.type.startsWith("image/")) throw new Error("Bitte eine Bilddatei auswählen.");
       if (file.size > 5*1024*1024) throw new Error("Das Foto darf höchstens 5 MB groß sein.");
       uploadedPath = crypto.randomUUID() + "-" + (file.name || "foto").replace(/[^a-zA-Z0-9._-]/g,"_");
@@ -2325,6 +2370,7 @@ async function submitFind() {
     }
     ["findDescription","findLocationText","findPhoto","findReporter"].forEach(id => document.getElementById(id).value = "");
     document.getElementById("findSafetyAgree").checked = false;
+    document.getElementById("findPhotoRightsAgree").checked = false;
     findCoordinates = null; if (findMarker) {findMarker.remove();findMarker=null;}
     toast("Danke! Der Pfandort wurde gespeichert.");
     await loadFinds();
