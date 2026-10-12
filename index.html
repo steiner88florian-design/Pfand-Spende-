@@ -567,7 +567,7 @@ main{padding:14px 14px 30px}
 min-height:405px;
 padding:21px 17px 23px
 }
-.illustration{height:215px}
+.illustration{height:175px;opacity:.82}.hero-content{padding-top:175px}
 .person{font-size:66px}
 .bottle,.can{font-size:50px}
 .quick-card{padding:12px}
@@ -609,6 +609,11 @@ padding:21px 17px 23px
 .find-item p{font-size:13px;line-height:1.4;color:var(--muted);margin:5px 0}
 .find-item button{background:#e4f4ed;color:#27795f;border-radius:10px;padding:9px 12px;font-weight:800;margin-top:7px}
 
+
+.legal-links{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:10px}
+.legal-links a{color:var(--green);text-decoration:underline;font-weight:700}
+.legal-screen p,.legal-screen li{font-size:14px;line-height:1.55;color:var(--muted)}
+.legal-warning{background:#fff3df;border-radius:14px;padding:12px;font-size:12px;line-height:1.45;color:#72552e}
 </style>
 </head>
 
@@ -684,7 +689,7 @@ Einfach, sicher und von Mensch zu Mensch.
 
       <button class="main-action give" onclick="show('reportFind')">
         <span class="action-icon">📍</span>
-        <span><b>Pfandfund melden</b><small>Pfand in der Natur oder Stadt entdeckt – mit oder ohne Konto</small></span>
+        <span><b>Pfand markieren</b><small>Pfand in der Natur oder Stadt entdeckt – mit oder ohne Konto</small></span>
         <span class="arrow">›</span>
       </button>
 
@@ -962,7 +967,7 @@ Pfand verschenken
 <section id="reportFind" class="screen">
   <div class="head">
     <button class="back" onclick="show('home')">‹</button>
-    <div><p class="eyebrow">Fundstelle teilen</p><h2>Pfandfund melden</h2></div>
+    <div><p class="eyebrow">Fundort markieren</p><h2>Pfand markieren</h2></div>
   </div>
   <div class="card form">
     <p class="find-form-note">Melde Pfand an einem öffentlichen, sicher zugänglichen Ort. Ein Konto ist nicht erforderlich. Bitte keine privaten Grundstücke betreten und keine gefährlichen Situationen riskieren.</p>
@@ -995,17 +1000,57 @@ Pfand verschenken
     <button class="primary" id="submitFindButton" onclick="submitFind()">📍 Fundstelle melden</button>
   </div>
   <div class="card" style="margin-top:12px">
-    <b>Aktuelle Fundmeldungen</b>
-    <p class="find-form-note">Fundmeldungen sind ungeprüfte Nutzerangaben. Prüfe vor dem Losgehen, ob die Stelle noch aktuell und sicher zugänglich ist.</p>
-    <button class="secondary" onclick="loadFinds()">Fundmeldungen aktualisieren</button>
+    <b>Markierte Pfandorte</b>
+    <p class="find-form-note">Pfandmarkierungen sind ungeprüfte Nutzerangaben. Prüfe vor dem Losgehen, ob die Stelle noch aktuell und sicher zugänglich ist.</p>
+    <button class="secondary" onclick="loadFinds()">Markierungen aktualisieren</button>
     <div id="findList" class="find-list"></div>
   </div>
 </section>
 
+<section id="privacyInfo" class="screen legal-screen">
+  <div class="head"><button class="back" onclick="show('home')">‹</button><div><p class="eyebrow">Rechtliches</p><h2>Datenschutz</h2></div></div>
+  <div class="card">
+    <div class="legal-warning"><b>Entwurf – vor Veröffentlichung vervollständigen.</b> Diese Seite ist noch keine vollständige Datenschutzerklärung. Betreiberkontakt, tatsächliche Datenflüsse, Speicherfristen und eingesetzte Dienste müssen geprüft und ergänzt werden.</div>
+    <h3>Welche Daten verarbeitet werden können</h3>
+    <p>Je nach Nutzung können Kontodaten, E-Mail-Adresse, Pfandangebote, Fundorte, freiwillig hochgeladene Fotos sowie technische Verbindungsdaten verarbeitet werden. Fundorte und Fotos bitte nur mit den nötigen Angaben einreichen.</p>
+    <h3>Externe Dienste</h3>
+    <p>Die App verwendet Supabase für Anmeldung und Datenspeicherung, OpenStreetMap-Karten und eine Ortssuche über Nominatim. Vor dem Start müssen die tatsächlichen Datenverarbeitungen und Rechtsgrundlagen geprüft werden.</p>
+    <h3>Kontakt und Rechte</h3>
+    <p>Hier müssen Betreibername, Kontaktadresse sowie ein Weg für Auskunfts- und Löschanfragen ergänzt werden.</p>
+  </div>
+</section>
+<section id="termsInfo" class="screen legal-screen">
+  <div class="head"><button class="back" onclick="show('home')">‹</button><div><p class="eyebrow">Rechtliches</p><h2>Nutzungsbedingungen</h2></div></div>
+  <div class="card">
+    <div class="legal-warning"><b>Entwurf – rechtlich prüfen lassen.</b> Diese Hinweise ersetzen keine vollständigen, rechtlich geprüften Nutzungsbedingungen für Deutschland, Österreich und die Schweiz.</div>
+    <ul>
+      <li>Fundmeldungen sind Angaben von Nutzern und werden nicht automatisch vor Ort überprüft.</li>
+      <li>Keine privaten Grundstücke ohne Erlaubnis betreten und keine gefährlichen Situationen riskieren.</li>
+      <li>Keine rechtswidrigen Inhalte, fremden personenbezogenen Daten oder Fotos erkennbarer Personen ohne geeignete Rechtsgrundlage veröffentlichen.</li>
+      <li>Falsche, gefährliche oder missbräuchliche Einträge können gemeldet und nach Prüfung verborgen werden.</li>
+    </ul>
+    <p>Vor Veröffentlichung müssen Regeln zu Konten, Meldungen, Moderation, Löschung, Haftung und Kontakt ergänzt und geprüft werden.</p>
+  </div>
+</section>
+<section id="imprintInfo" class="screen legal-screen">
+  <div class="head"><button class="back" onclick="show('home')">‹</button><div><p class="eyebrow">Rechtliches</p><h2>Impressum</h2></div></div>
+  <div class="card">
+    <div class="legal-warning"><b>Pflichtangaben fehlen noch.</b> Bitte nicht als fertiges Impressum betrachten.</div>
+    <p><b>Betreiber:</b> [Vollständiger Name ergänzen]</p>
+    <p><b>Postanschrift:</b> [Zustellfähige Anschrift ergänzen]</p>
+    <p><b>Kontakt:</b> [E-Mail-Adresse ergänzen]</p>
+    <p>Vor dem öffentlichen Start prüfen, welche Anbieterangaben in Deutschland, Österreich und der Schweiz für deinen konkreten Betrieb erforderlich sind.</p>
+  </div>
+</section>
 </main>
 
 <footer>
 ♻ Pfand Finder · Gemeinsam Gutes tun · Deutschland · Österreich · Schweiz
+<nav class="legal-links" aria-label="Rechtliche Informationen">
+  <a href="#" onclick="show('privacyInfo');return false;">Datenschutz</a>
+  <a href="#" onclick="show('termsInfo');return false;">Nutzungsbedingungen</a>
+  <a href="#" onclick="show('imprintInfo');return false;">Impressum</a>
+</nav>
 </footer>
 
 
@@ -1113,20 +1158,20 @@ async function submitFind() {
     ["findDescription","findLocationText","findPhoto","findReporter"].forEach(id => document.getElementById(id).value = "");
     document.getElementById("findSafetyAgree").checked = false;
     findCoordinates = null; if (findMarker) {findMarker.remove();findMarker=null;}
-    toast("Danke! Deine Fundmeldung wurde gespeichert.");
+    toast("Danke! Der Pfandort wurde gespeichert.");
     await loadFinds();
-  } catch(e) { toast(e.message || "Fundmeldung konnte nicht gespeichert werden."); }
+  } catch(e) { toast(e.message || "Pfandort konnte nicht gespeichert werden."); }
   finally { button.disabled=false; button.textContent="📍 Fundstelle melden"; }
 }
 async function loadFinds() {
   const container = document.getElementById("findList");
   if (!container || !supabaseClient) { if(container) container.textContent="Datenbank nicht verbunden."; return; }
-  container.textContent = "Fundmeldungen werden geladen …";
+  container.textContent = "Markierungen werden geladen …";
   const {data,error} = await supabaseClient.from("pfand_finds")
     .select("id,item_type,quantity_estimate,description,location_label,latitude,longitude,status,created_at")
     .in("status",["new","collecting"]).order("created_at",{ascending:false}).limit(100);
-  if (error) { container.textContent="Fundmeldungen konnten nicht geladen werden. Bitte zuerst die SQL-Datei in Supabase ausführen."; return; }
-  if (!data?.length) { container.textContent="Noch keine Fundmeldungen. Du kannst die erste Fundstelle eintragen."; return; }
+  if (error) { container.textContent="Markierungen konnten nicht geladen werden. Bitte zuerst die SQL-Datei in Supabase ausführen."; return; }
+  if (!data?.length) { container.textContent="Noch keine Markierungen. Du kannst die erste Fundstelle eintragen."; return; }
   container.innerHTML = "";
   data.forEach(item => {
     const el = document.createElement("article"); el.className="find-item";
