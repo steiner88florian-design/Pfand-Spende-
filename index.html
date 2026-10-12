@@ -86,6 +86,12 @@ font-size:11px;
 margin-top:2px
 }
 
+.header-actions{position:relative;display:flex;align-items:center;gap:8px}
+.account-trigger{min-height:43px;border-radius:14px;background:var(--mint);color:var(--green);padding:0 12px;font-weight:800;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.menu-dropdown{position:absolute;right:0;top:50px;z-index:1000;width:230px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:8px;box-shadow:0 12px 35px #163c2b24}
+.menu-dropdown button{display:block;width:100%;text-align:left;background:#fff;padding:12px;border-radius:10px;color:var(--ink);font-weight:700}
+.menu-dropdown button:hover{background:var(--mint)}
+.menu-dropdown .menu-logout{color:#b42318}
 .menu{
 width:43px;
 height:43px;
@@ -633,6 +639,11 @@ padding:21px 17px 23px
 .legal-links a{color:var(--green);text-decoration:underline;font-weight:700}
 .legal-screen p,.legal-screen li{font-size:14px;line-height:1.55;color:var(--muted)}
 .legal-warning{background:#fff3df;border-radius:14px;padding:12px;font-size:12px;line-height:1.45;color:#72552e}
+
+.message-item{border:1px solid var(--line);border-radius:14px;padding:14px;margin:12px 0;background:#fff}
+.message-status{display:inline-flex;align-items:center;border-radius:999px;padding:5px 10px;font-size:12px;font-weight:800;background:#fff3cd;color:#805b00}
+.message-status.accepted{background:#dcfce7;color:#166534}.message-status.rejected{background:#fee2e2;color:#991b1b}.message-status.pending{background:#fff3cd;color:#805b00}
+.message-reply{margin-top:12px;padding:12px;border-radius:10px;background:#dcfce7;color:#14532d}.message-reply.rejected{background:#fee2e2;color:#7f1d1d}
 </style>
 </head>
 
@@ -649,7 +660,19 @@ padding:21px 17px 23px
 </div>
 </div>
 
-<button class="menu" type="button" onclick="openAccount()">👤 Konto</button>
+<div class="header-actions">
+<button id="accountTrigger" class="account-trigger" type="button" onclick="openAccount()">Anmelden</button>
+<button class="menu" type="button" aria-label="Menü öffnen" aria-expanded="false" onclick="toggleMenu()">☰</button>
+<div id="mainMenu" class="menu-dropdown hidden">
+<button onclick="closeMenu();show('account')">👤 Benutzerkonto</button>
+<button onclick="closeMenu();show('reportFind')">📍 Pfand markieren</button>
+<button onclick="closeMenu();show('give')">🏠 Pfand verschenken</button>
+<button onclick="closeMenu();show('find')">🔎 Pfand suchen</button>
+<button onclick="closeMenu();show('messages');loadMyMessages()">💬 Nachrichten <span id="messageBadge" class="hidden">●</span></button>
+<button onclick="closeMenu();show('contactOperator')">✉️ Kontakt zum Betreiber</button>
+<button id="menuLogout" class="menu-logout hidden" onclick="closeMenu();logout()">↪ Abmelden</button>
+</div>
+</div>
 </header>
 
 <main>
@@ -828,13 +851,26 @@ Mit einem Konto kannst du Pfand-Angebote einstellen und später Abholanfragen ve
 </div>
 
 <div class="card" style="margin-top:12px">
-
-<b>Bereit für den nächsten Schritt.</b>
-
-<p class="auth-note">
-Als Nächstes verbinden wir Angebote, Karte und Abholanfragen mit deinem Konto.
-</p>
-
+<b>Benutzerkonto bearbeiten</b>
+<p class="auth-note">Deine E-Mail und Profildaten kannst du hier ändern. Das Passwort wird aus Sicherheitsgründen nie angezeigt – du kannst es neu festlegen.</p>
+<form class="auth-form" onsubmit="saveAccountDetails(event)">
+<label for="profileUsername">Anmeldename</label>
+<input id="profileUsername" maxlength="60" placeholder="Anmeldename" autocomplete="nickname">
+<label for="profileEmail">E-Mail-Adresse</label>
+<input id="profileEmail" type="email" placeholder="E-Mail-Adresse" autocomplete="email" required>
+<label for="profilePhone">Telefonnummer (freiwillig)</label>
+<input id="profilePhone" type="tel" placeholder="Telefonnummer" autocomplete="tel">
+<label for="profileAddress">Adresse (freiwillig)</label>
+<input id="profileAddress" placeholder="Straße, Hausnummer, PLZ, Ort" autocomplete="street-address">
+<button class="primary" type="submit">Änderungen speichern</button>
+</form>
+<hr>
+<b>Passwort ändern</b>
+<form class="auth-form" onsubmit="changeAccountPassword(event)">
+<input id="newAccountPassword" type="password" minlength="6" placeholder="Neues Passwort (mind. 6 Zeichen)" autocomplete="new-password" required>
+<input id="confirmAccountPassword" type="password" minlength="6" placeholder="Neues Passwort wiederholen" autocomplete="new-password" required>
+<button class="secondary" type="submit">Passwort aktualisieren</button>
+</form>
 </div>
 
 </div>
@@ -1079,6 +1115,28 @@ Pfand verschenken
     <p>Vor dem öffentlichen Start prüfen, welche Anbieterangaben in Deutschland, Österreich und der Schweiz für deinen konkreten Betrieb erforderlich sind.</p>
   </div>
 </section>
+
+<section id="messages" class="screen">
+  <div class="head"><button class="back" onclick="show('home')">‹</button><div><p class="eyebrow">Dein Postfach</p><h2>Nachrichten</h2></div></div>
+  <p class="auth-note">Hier findest du deine Abholanfragen und den aktuellen Stand. Antworten und Entscheidungen des Anbieters erscheinen direkt bei der jeweiligen Anfrage.</p>
+  <div id="messagesContent" class="card"><p>Bitte warten …</p></div>
+</section>
+
+<section id="contactOperator" class="screen">
+  <div class="head"><button class="back" onclick="show('home')">‹</button><div><p class="eyebrow">Wir helfen gerne</p><h2>Kontakt zum Betreiber</h2></div></div>
+  <div class="card">
+    <p>Hast du eine Frage, ein Problem oder einen Verbesserungsvorschlag? Schreib uns direkt hier.</p>
+    <form class="auth-form" onsubmit="sendOperatorMessage(event)">
+      <label for="operatorTopic">Worum geht es?</label>
+      <select id="operatorTopic" required><option value="">Bitte auswählen</option><option>Technisches Problem</option><option>Fundstelle melden</option><option>Frage zu meinem Konto</option><option>Feedback und Vorschlag</option><option>Datenschutzanfrage</option><option>Sonstiges</option></select>
+      <label for="operatorSubject">Betreff</label><input id="operatorSubject" maxlength="120" required placeholder="Kurzer Betreff">
+      <label for="operatorBody">Deine Nachricht</label><textarea id="operatorBody" maxlength="3000" rows="5" required placeholder="Wie können wir helfen?"></textarea>
+      <p class="auth-note">Bitte keine Passwörter oder besonders sensiblen Daten senden.</p>
+      <button class="primary" type="submit" id="operatorSendButton">Nachricht senden</button>
+    </form>
+    <div id="operatorContactNote" class="auth-note">Für das Senden ist ein angemeldetes Konto erforderlich, damit wir dir antworten können.</div>
+  </div>
+</section>
 </main>
 
 <footer>
@@ -1150,6 +1208,17 @@ let leafletMap=null;
    NAVIGATION
 ========================= */
 
+function toggleMenu(){
+  const menu=document.getElementById("mainMenu");
+  const button=document.querySelector(".header-actions .menu");
+  const opening=menu.classList.contains("hidden");
+  menu.classList.toggle("hidden",!opening);
+  button.setAttribute("aria-expanded",String(opening));
+}
+function closeMenu(){
+  document.getElementById("mainMenu")?.classList.add("hidden");
+  document.querySelector(".header-actions .menu")?.setAttribute("aria-expanded","false");
+}
 function openAccount(){
   document.querySelectorAll(".screen")
     .forEach(s=>s.classList.remove("active"));
@@ -1180,6 +1249,9 @@ function show(id){
 
   if(id==="give"){
     refreshGive();
+  }
+  if(id==="messages"){
+    loadMyMessages();
   }
 
   window.scrollTo({
@@ -1379,8 +1451,16 @@ async function refreshAuth(){
 
   document.getElementById("giveFormCard")
     .classList.toggle("hidden",!user);
+  document.getElementById("menuLogout")
+    .classList.toggle("hidden",!user);
+  const trigger=document.getElementById("accountTrigger");
+  if(trigger) trigger.textContent=user ? (user.user_metadata?.display_name || user.email || "Mein Konto") : "Anmelden";
 
   if(user){
+    document.getElementById("profileEmail").value=user.email || "";
+    document.getElementById("profileUsername").value=user.user_metadata?.username || user.user_metadata?.display_name || "";
+    document.getElementById("profilePhone").value=user.user_metadata?.phone || "";
+    document.getElementById("profileAddress").value=user.user_metadata?.address || "";
 
     let name=
       user.email ||
@@ -1404,7 +1484,45 @@ async function refreshAuth(){
     document.getElementById("welcome")
       .textContent=
         "Hallo "+name.trim()+" 👋";
+    if(trigger) trigger.textContent=name.trim() || user.email || "Mein Konto";
   }
+}
+
+async function saveAccountDetails(event){
+  event.preventDefault();
+  if(!supabaseClient){toast("Supabase ist nicht verbunden.");return;}
+  const {data:{user},error:userError}=await supabaseClient.auth.getUser();
+  if(userError || !user){toast("Bitte zuerst anmelden.");return;}
+  const email=document.getElementById("profileEmail").value.trim();
+  const username=document.getElementById("profileUsername").value.trim();
+  const phone=document.getElementById("profilePhone").value.trim();
+  const address=document.getElementById("profileAddress").value.trim();
+  try{
+    const {error:authError}=await supabaseClient.auth.updateUser({
+      email,
+      data:{username,display_name:username,phone,address}
+    });
+    if(authError) throw authError;
+    const profilePatch={display_name:username,phone,address};
+    const {error:profileError}=await supabaseClient.from("profiles").update(profilePatch).eq("id",user.id);
+    if(profileError && !["42703","PGRST204"].includes(profileError.code)) throw profileError;
+    toast("Änderungen gespeichert. Bei einer E-Mail-Änderung musst du sie möglicherweise bestätigen.");
+    await refreshAuth();
+  }catch(err){toast(err.message || "Änderungen konnten nicht gespeichert werden.");}
+}
+async function changeAccountPassword(event){
+  event.preventDefault();
+  if(!supabaseClient){toast("Supabase ist nicht verbunden.");return;}
+  const password=document.getElementById("newAccountPassword").value;
+  const confirm=document.getElementById("confirmAccountPassword").value;
+  if(password!==confirm){toast("Die Passwörter stimmen nicht überein.");return;}
+  try{
+    const {error}=await supabaseClient.auth.updateUser({password});
+    if(error) throw error;
+    document.getElementById("newAccountPassword").value="";
+    document.getElementById("confirmAccountPassword").value="";
+    toast("Passwort wurde aktualisiert.");
+  }catch(err){toast(err.message || "Passwort konnte nicht geändert werden.");}
 }
 
 
@@ -1856,6 +1974,46 @@ async function sendPickupRequest(event){
     sendButton.disabled=false;
     sendButton.textContent="Abholanfrage senden";
   }
+}
+
+/* =========================
+   NACHRICHTEN UND KONTAKT
+========================= */
+function escapeHtml(value){return String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+async function sendOperatorMessage(event){
+  event.preventDefault();
+  if(!supabaseClient){toast("Der Dienst ist noch nicht verbunden.");return;}
+  const {data:{user},error:userError}=await supabaseClient.auth.getUser();
+  if(userError||!user){toast("Bitte zuerst anmelden, damit wir dir antworten können.");show("account");return;}
+  const button=document.getElementById("operatorSendButton");button.disabled=true;button.textContent="Wird gesendet …";
+  try{
+    const {error}=await supabaseClient.from("support_messages").insert({user_id:user.id,topic:document.getElementById("operatorTopic").value,subject:document.getElementById("operatorSubject").value.trim(),message:document.getElementById("operatorBody").value.trim(),status:"new"});
+    if(error)throw error;
+    document.getElementById("operatorSubject").value="";document.getElementById("operatorBody").value="";document.getElementById("operatorTopic").value="";
+    toast("Nachricht wurde an den Betreiber gesendet.");show("messages");loadMyMessages();
+  }catch(err){toast("Nachricht konnte nicht gesendet werden. Bitte prüfe die Supabase-SQL-Einrichtung.");console.error(err);}
+  finally{button.disabled=false;button.textContent="Nachricht senden";}
+}
+async function loadMyMessages(){
+ const host=document.getElementById("messagesContent");if(!host)return;
+ if(!supabaseClient){host.innerHTML="<p>Der Dienst ist noch nicht verbunden.</p>";return;}
+ const {data:{user},error:userError}=await supabaseClient.auth.getUser();
+ if(userError||!user){host.innerHTML=`<p>Bitte <button class="secondary" onclick="show('account')">anmelden</button>, um deine Anfragen und Nachrichten zu sehen.</p>`;return;}
+ host.innerHTML="<p>Nachrichten werden geladen …</p>";
+ let cards=[];
+ try{
+  const {data:requests,error}=await supabaseClient.from("pickup_requests").select("id,offer_id,requested_date,time_of_day,message,status,response_message,responded_at,created_at").eq("requester_id",user.id).order("created_at",{ascending:false});
+  if(error)throw error;
+  (requests||[]).forEach(r=>{
+   const status=String(r.status||"pending").toLowerCase();const accepted=["accepted","approved","confirmed"].includes(status);const rejected=["rejected","declined","denied"].includes(status);const label=accepted?"Akzeptiert":rejected?"Abgelehnt":status==="cancelled"?"Storniert":"Wartet auf Antwort";
+   cards.push(`<article class="message-item"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap"><b>🏠 Abholanfrage</b><span class="message-status ${accepted?"accepted":rejected?"rejected":"pending"}">${label}</span></div><p><b>Gewünschter Termin:</b> ${escapeHtml(r.requested_date||"Noch offen")} · ${escapeHtml(r.time_of_day||"")}</p><p><b>Deine Nachricht:</b> ${escapeHtml(r.message||"")}</p><p class="auth-note">Anfrage-ID: ${escapeHtml(r.id)}</p>${r.response_message?`<div class="message-reply ${rejected?"rejected":""}"><b>Antwort des Anbieters</b><p>${escapeHtml(r.response_message)}</p></div>`:accepted?'<div class="message-reply"><b>Akzeptiert</b><p>Der Anbieter hat deine Abholanfrage angenommen.</p></div>':rejected?'<div class="message-reply rejected"><b>Abgelehnt</b><p>Der Anbieter hat deine Abholanfrage abgelehnt.</p></div>':'<p class="auth-note">Sobald der Anbieter antwortet, wird der Status hier angezeigt.</p>'}</article>`);
+  });
+ }catch(err){console.warn("pickup requests",err);cards.push('<p>Abholanfragen konnten nicht geladen werden. Bitte prüfe die Tabellenrechte in Supabase.</p>');}
+ try{
+  const {data:notes,error}=await supabaseClient.from("support_messages").select("id,topic,subject,message,status,reply,created_at,replied_at").eq("user_id",user.id).order("created_at",{ascending:false});
+  if(!error)(notes||[]).forEach(m=>cards.push(`<article class="message-item"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap"><b>✉️ Kontakt zum Betreiber</b><span class="message-status ${m.reply?"accepted":"pending"}">${m.reply?"Antwort erhalten":"Gesendet"}</span></div><p><b>${escapeHtml(m.subject)}</b></p><p><b>Thema:</b> ${escapeHtml(m.topic)}</p><p>${escapeHtml(m.message)}</p>${m.reply?`<div class="message-reply"><b>Antwort vom Betreiber</b><p>${escapeHtml(m.reply)}</p></div>`:'<p class="auth-note">Deine Nachricht ist eingegangen. Eine Antwort wird hier angezeigt.</p>'}</article>`));
+ }catch(err){console.warn("support messages",err);}
+ host.innerHTML=cards.length?cards.join(""): ` <div style="text-align:center;padding:26px"><div style="font-size:36px">💬</div><h3>Dein Postfach ist noch leer</h3><p class="auth-note">Gesendete Abholanfragen und Nachrichten an den Betreiber erscheinen hier.</p><button class="secondary" onclick="show('find')">Pfand suchen</button> <button class="secondary" onclick="show('contactOperator')">Kontakt aufnehmen</button></div>`;
 }
 
 /* =========================
