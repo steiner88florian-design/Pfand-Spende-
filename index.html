@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#2D8B68">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Pfand-Spenden">
-<title>Pfand-Spenden – Gemeinsam Gutes tun</title>
+<meta name="apple-mobile-web-app-title" content="Pfand Finder">
+<title>Pfand Finder – Gemeinsam Gutes tun</title>
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
@@ -573,6 +573,32 @@ padding:21px 17px 23px
 .quick-card{padding:12px}
 .quick{gap:8px}
 }
+
+/* Abholanfrage: ein einziges Formular */
+.pickup-overlay{
+  position:fixed; inset:0; z-index:1000;
+  background:#10251dcc; display:flex; align-items:center;
+  justify-content:center; padding:18px;
+}
+.pickup-dialog{
+  width:100%; max-width:520px; max-height:90vh; overflow:auto;
+  background:#fff; border-radius:24px; padding:22px;
+  box-shadow:0 20px 70px #0004;
+}
+.pickup-dialog h2{margin:0 0 8px;font-size:25px;color:var(--ink)}
+.pickup-dialog p{margin:0 0 16px;color:var(--muted);line-height:1.4}
+.pickup-dialog label{display:block;font-weight:800;font-size:14px;margin:14px 0 7px}
+.pickup-dialog select,.pickup-dialog input,.pickup-dialog textarea{
+  width:100%; padding:13px 14px; border:1px solid #d7e7df;
+  border-radius:13px; background:#fbfdfc; color:var(--ink); font:inherit;
+}
+.pickup-dialog textarea{min-height:112px;resize:vertical}
+.pickup-buttons{display:flex;gap:10px;margin-top:18px}
+.pickup-buttons button{flex:1;padding:14px 10px;border-radius:13px;font-weight:800}
+.pickup-cancel{background:#eef7f2;color:var(--green)}
+.pickup-send{background:var(--green);color:#fff}
+.pickup-send:disabled{opacity:.6}
+
 </style>
 </head>
 
@@ -584,7 +610,7 @@ padding:21px 17px 23px
 <div class="brand">
 <div class="brand-icon">♻</div>
 <div>
-<b>Pfand-Spenden</b>
+<b>Pfand Finder</b>
 <small>Gemeinsam Gutes tun</small>
 </div>
 </div>
@@ -681,7 +707,7 @@ Den genauen Abholort gibst du erst frei, wenn du eine Anfrage bestätigst.
 <button class="back" onclick="show('home')">‹</button>
 <div>
 <p class="eyebrow">Dein Konto</p>
-<h2>Pfand-Spenden</h2>
+<h2>Pfand Finder</h2>
 </div>
 </div>
 
@@ -918,8 +944,37 @@ Pfand verschenken
 </main>
 
 <footer>
-♻ Pfand-Spenden · Mitmachen · Helfen · Teilen
+♻ Pfand Finder · Mitmachen · Helfen · Teilen
 </footer>
+
+
+<div id="pickupOverlay" class="pickup-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="pickupTitle">
+  <div class="pickup-dialog">
+    <h2 id="pickupTitle">📩 Abholung anfragen</h2>
+    <p>Wähle einen passenden Tag und eine Tageszeit. Du kannst deine Nachricht frei bearbeiten.</p>
+    <form id="pickupForm" onsubmit="sendPickupRequest(event)">
+      <label for="pickupDateChoice">Wann soll die Abholung stattfinden?</label>
+      <select id="pickupDateChoice" onchange="updatePickupDateField()">
+        <option value="today">Heute</option>
+        <option value="tomorrow">Morgen</option>
+        <option value="other">Anderer Tag – Kalender auswählen</option>
+      </select>
+      <input id="pickupCustomDate" type="date" class="hidden" aria-label="Anderes Abholdatum">
+      <label for="pickupTime">Welche Tageszeit passt?</label>
+      <select id="pickupTime" required>
+        <option value="Vormittag">Vormittag</option>
+        <option value="Nachmittag">Nachmittag</option>
+        <option value="Abend">Abend</option>
+      </select>
+      <label for="pickupMessage">Deine Nachricht</label>
+      <textarea id="pickupMessage" required>Hallo, danke für das Angebot! Ich würde das Pfand gerne abholen. Gewählte Tageszeit: Vormittag.</textarea>
+      <div class="pickup-buttons">
+        <button type="button" class="pickup-cancel" onclick="closePickupDialog()">Abbrechen</button>
+        <button id="pickupSendButton" type="submit" class="pickup-send">Abholanfrage senden</button>
+      </div>
+    </form>
+  </div>
+</div>
 
 <div id="toast" class="toast"></div>
 
@@ -1122,7 +1177,7 @@ async function submitAuth(event){
 
       if(error) throw error;
 
-      toast("Willkommen bei Pfand-Spenden 💚");
+      toast("Willkommen bei Pfand Finder 💚");
     }
 
     await refreshAuth();
@@ -1541,144 +1596,124 @@ async function createOffer(){
    ABHOLANFRAGE
 ========================= */
 
-async function requestPickup(offerId){
+let currentPickupOfferId=null;
 
-  if(!supabaseClient){
-
-    toast(
-      "Supabase ist noch nicht verbunden."
-    );
-
-    return;
-  }
-
-
-  const {
-    data:{user}
-  }=
-    await supabaseClient.auth.getUser();
-
-
-  if(!user){
-
-    show("account");
-
-    setAuthMode("signup");
-
-    toast(
-      "Bitte zuerst kostenlos registrieren oder anmelden."
-    );
-
-    return;
-  }
-
-
-  const requestedDate=
-    prompt(
-      "Für welchen Tag möchtest du die Abholung? "+
-      "(z. B. 2026-10-09)"
-    );
-
-
-  if(!requestedDate){
-    return;
-  }
-
-
-  if(
-    !/^\d{4}-\d{2}-\d{2}$/
-      .test(requestedDate)
-  ){
-
-    toast(
-      "Bitte das Datum im Format JJJJ-MM-TT eingeben."
-    );
-
-    return;
-  }
-
-
-  const timeOfDay=
-    prompt(
-      "Wann passt es? Vormittag, Nachmittag oder Abend"
-    );
-
-
-  if(!timeOfDay){
-    return;
-  }
-
-
-  const normalizedTime=
-    timeOfDay
-      .trim()
-      .toLowerCase();
-
-
-  if(
-    ![
-      "vormittag",
-      "nachmittag",
-      "abend"
-    ].includes(normalizedTime)
-  ){
-
-    toast(
-      "Bitte Vormittag, Nachmittag oder Abend eingeben."
-    );
-
-    return;
-  }
-
-
-  const message=
-    prompt(
-      "Nachricht an den Spender (optional):"
-    ) || "";
-
-
-  const {error}=
-    await supabaseClient
-      .from("pickup_requests")
-      .insert({
-
-        offer_id:
-          offerId,
-
-        requester_id:
-          user.id,
-
-        requested_date:
-          requestedDate,
-
-        time_of_day:
-          normalizedTime,
-
-        message:
-          message.trim(),
-
-        status:
-          "pending"
-
-      });
-
-
-  if(error){
-
-    toast(
-      error.message ||
-      "Abholanfrage konnte nicht gesendet werden."
-    );
-
-    return;
-  }
-
-
-  toast(
-    "✅ Abholanfrage wurde gesendet."
-  );
+function dateToLocalISO(date){
+  const year=date.getFullYear();
+  const month=String(date.getMonth()+1).padStart(2,"0");
+  const day=String(date.getDate()).padStart(2,"0");
+  return `${year}-${month}-${day}`;
 }
 
+function updatePickupDateField(){
+  const choice=document.getElementById("pickupDateChoice").value;
+  const custom=document.getElementById("pickupCustomDate");
+  custom.classList.toggle("hidden",choice!=="other");
+  custom.required=choice==="other";
+  if(choice==="other"){
+    const tomorrow=new Date();
+    tomorrow.setDate(tomorrow.getDate()+1);
+    custom.min=dateToLocalISO(tomorrow);
+  }
+}
+
+function closePickupDialog(){
+  document.getElementById("pickupOverlay").classList.add("hidden");
+}
+
+async function requestPickup(offerId){
+  if(!supabaseClient){
+    toast("Supabase ist noch nicht verbunden.");
+    return;
+  }
+
+  const {data:{user}}=await supabaseClient.auth.getUser();
+  if(!user){
+    show("account");
+    setAuthMode("signup");
+    toast("Bitte zuerst kostenlos registrieren oder anmelden.");
+    return;
+  }
+
+  currentPickupOfferId=offerId;
+  document.getElementById("pickupDateChoice").value="today";
+  document.getElementById("pickupCustomDate").value="";
+  document.getElementById("pickupTime").value="Vormittag";
+  document.getElementById("pickupMessage").value=
+    "Hallo, danke für das Angebot! Ich würde das Pfand gerne abholen. Gewählte Tageszeit: Vormittag.";
+  updatePickupDateField();
+  document.getElementById("pickupOverlay").classList.remove("hidden");
+}
+
+async function sendPickupRequest(event){
+  event.preventDefault();
+  if(!supabaseClient || !currentPickupOfferId){
+    toast("Die Abholanfrage konnte nicht vorbereitet werden.");
+    return;
+  }
+
+  const {data:{user},error:userError}=await supabaseClient.auth.getUser();
+  if(userError || !user){
+    toast("Bitte zuerst anmelden.");
+    closePickupDialog();
+    show("account");
+    return;
+  }
+
+  const choice=document.getElementById("pickupDateChoice").value;
+  const today=new Date();
+  let requestedDate;
+
+  if(choice==="today"){
+    requestedDate=dateToLocalISO(today);
+  }else if(choice==="tomorrow"){
+    today.setDate(today.getDate()+1);
+    requestedDate=dateToLocalISO(today);
+  }else{
+    requestedDate=document.getElementById("pickupCustomDate").value;
+    if(!requestedDate){
+      toast("Bitte wähle ein Datum im Kalender.");
+      return;
+    }
+    if(requestedDate<dateToLocalISO(new Date(Date.now()+86400000))){
+      toast("Bitte wähle mindestens morgen als Datum.");
+      return;
+    }
+  }
+
+  const timeOfDay=document.getElementById("pickupTime").value;
+  const message=document.getElementById("pickupMessage").value.trim();
+  if(!message){
+    toast("Bitte gib eine Nachricht ein.");
+    return;
+  }
+
+  const sendButton=document.getElementById("pickupSendButton");
+  sendButton.disabled=true;
+  sendButton.textContent="Wird gesendet …";
+
+  try{
+    const {error}=await supabaseClient
+      .from("pickup_requests")
+      .insert({
+        offer_id:currentPickupOfferId,
+        requester_id:user.id,
+        requested_date:requestedDate,
+        time_of_day:timeOfDay,
+        message:message,
+        status:"pending"
+      });
+
+    if(error) throw error;
+    closePickupDialog();
+    toast("✅ Abholanfrage wurde gesendet.");
+  }catch(error){
+    toast(error.message || "Abholanfrage konnte nicht gesendet werden.");
+  }finally{
+    sendButton.disabled=false;
+    sendButton.textContent="Abholanfrage senden";
+  }
+}
 
 /* =========================
    ANGEBOTE AUF KARTE
