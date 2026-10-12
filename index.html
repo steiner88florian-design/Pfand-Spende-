@@ -607,7 +607,10 @@ padding:21px 17px 23px
 .find-item{background:#fff;border:1px solid var(--line);border-radius:17px;padding:14px}
 .find-item h3{font-size:16px;margin:0 0 6px}
 .find-item p{font-size:13px;line-height:1.4;color:var(--muted);margin:5px 0}
-.find-item button{background:#e4f4ed;color:#27795f;border-radius:10px;padding:9px 12px;font-weight:800;margin-top:7px}
+.find-item button{background:#e4f4ed;color:#27795f;border-radius:10px;padding:9px 12px;font-weight:800;margin-top:7px;margin-right:6px}
+.find-details{margin-top:10px;padding-top:10px;border-top:1px solid var(--line)}
+.find-details img{display:block;width:100%;max-height:320px;object-fit:contain;background:#f5f8f6;border-radius:12px;margin-top:8px}
+.find-details .coordinates{font-size:12px;color:var(--muted);overflow-wrap:anywhere}
 
 
 .legal-links{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:10px}
@@ -2382,7 +2385,7 @@ async function loadFinds() {
   if (!container || !supabaseClient) { if(container) container.textContent="Datenbank nicht verbunden."; return; }
   container.textContent = "Markierungen werden geladen …";
   const {data,error} = await supabaseClient.from("pfand_finds")
-    .select("id,item_type,quantity_estimate,description,location_label,latitude,longitude,status,created_at")
+    .select("id,item_type,quantity_estimate,description,location_label,latitude,longitude,status,created_at,photo_path")
     .in("status",["new","collecting"]).order("created_at",{ascending:false}).limit(100);
   if (error) { container.textContent="Markierungen konnten nicht geladen werden. Bitte zuerst die SQL-Datei in Supabase ausführen."; return; }
   if (!data?.length) { container.textContent="Noch keine Markierungen. Du kannst die erste Fundstelle eintragen."; return; }
@@ -2395,8 +2398,29 @@ async function loadFinds() {
       <p><b>Menge:</b> ${safeFindText(item.quantity_estimate || "Nicht angegeben")}</p>
       <p><b>Ort:</b> ${safeFindText(item.location_label || "Ungefährer Kartenpunkt")}</p>
       ${item.description?`<p>${safeFindText(item.description)}</p>`:""}<p>Gemeldet: ${safeFindText(date)}</p>
-      <button type="button">Fundort auf Karte anzeigen</button>`;
-    el.querySelector("button").addEventListener("click", () => {
+      <button type="button" class="show-find-details">Ort und Bild anzeigen</button>
+      <button type="button" class="show-find-map">Auf Karte anzeigen</button>
+      <div class="find-details" hidden></div>`;
+    const detailsButton = el.querySelector(".show-find-details");
+    const details = el.querySelector(".find-details");
+    detailsButton.addEventListener("click", async () => {
+      if (!details.hidden) { details.hidden = true; detailsButton.textContent = "Ort und Bild anzeigen"; return; }
+      details.hidden = false;
+      details.innerHTML = `<p><b>Ort:</b> ${safeFindText(item.location_label || "Kein genauer Ortsname angegeben")}</p><p class="coordinates">Kartenkoordinaten: ${Number(item.latitude).toFixed(6)}, ${Number(item.longitude).toFixed(6)}</p><p><b>Bild:</b> ${item.photo_path ? "Bild wird geladen …" : "Für diese Fundstelle wurde kein Bild hochgeladen."}</p>`;
+      detailsButton.textContent = "Details ausblenden";
+      if (item.photo_path) {
+        const imageText = details.querySelector("p:last-child");
+        const {data:photoData,error:photoError} = await supabaseClient.storage.from(findPhotoBucket).createSignedUrl(item.photo_path, 3600);
+        if (photoError || !photoData?.signedUrl) { imageText.textContent = "Das Bild ist derzeit nicht verfügbar."; return; }
+        imageText.textContent = "Bild zur Fundstelle:";
+        const img = document.createElement("img");
+        img.src = photoData.signedUrl;
+        img.alt = "Foto der markierten Pfandfundstelle";
+        img.loading = "lazy";
+        details.appendChild(img);
+      }
+    });
+    el.querySelector(".show-find-map").addEventListener("click", () => {
       show("find"); setTimeout(() => {
         if (leafletMap) {
           leafletMap.setView([item.latitude,item.longitude],16);
