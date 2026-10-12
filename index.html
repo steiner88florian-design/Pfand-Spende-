@@ -783,6 +783,16 @@ Registrieren
 
 <div id="nameFields" class="hidden">
 
+<label for="signupUsername">Anmeldename</label>
+<input id="signupUsername"
+placeholder="Anmeldename (öffentlich sichtbar)"
+autocomplete="nickname"
+minlength="3"
+maxlength="24"
+pattern="[A-Za-z0-9._-]+"
+title="3–24 Zeichen: Buchstaben, Zahlen, Punkt, Unterstrich oder Bindestrich"
+required>
+
 <input id="firstName"
 placeholder="Vorname"
 autocomplete="given-name">
@@ -1391,6 +1401,15 @@ async function submitAuth(event){
         document.getElementById("lastName")
           .value.trim();
 
+      const username=
+        document.getElementById("signupUsername")
+          .value.trim();
+
+      if(!username || !/^[A-Za-z0-9._-]{3,24}$/.test(username)){
+        toast("Bitte einen Anmeldenamen mit 3–24 erlaubten Zeichen eingeben.");
+        return;
+      }
+
       if(!first || !last){
         toast("Bitte Vorname und Nachname eingeben.");
         return;
@@ -1399,7 +1418,13 @@ async function submitAuth(event){
       const {data,error}=
         await supabaseClient.auth.signUp({
           email,
-          password
+          password,
+          options:{
+            data:{
+              username,
+              display_name:username
+            }
+          }
         });
 
       if(error) throw error;
@@ -1413,7 +1438,7 @@ async function submitAuth(event){
               id:data.user.id,
               first_name:first,
               last_name:last,
-              display_name:first
+              display_name:username
             });
 
         if(
@@ -1501,7 +1526,7 @@ async function refreshAuth(){
   document.getElementById("menuLogout")
     .classList.toggle("hidden",!user);
   const trigger=document.getElementById("accountTrigger");
-  if(trigger) trigger.textContent=user ? (user.user_metadata?.display_name || user.email || "Mein Konto") : "Anmelden";
+  if(trigger) trigger.textContent=user ? (user.user_metadata?.username || user.user_metadata?.display_name || "Mein Konto") : "Anmelden";
 
   if(user){
     document.getElementById("profileEmail").value=user.email || "";
@@ -1510,28 +1535,31 @@ async function refreshAuth(){
     document.getElementById("profileAddress").value=user.user_metadata?.address || "";
 
     let name=
-      user.email ||
-      "Angemeldet";
+      user.user_metadata?.username ||
+      user.user_metadata?.display_name ||
+      "";
 
     const {data:profile}=
       await supabaseClient
         .from("profiles")
-        .select("first_name,last_name")
+        .select("first_name,last_name,display_name")
         .eq("id",user.id)
         .maybeSingle();
 
-    if(profile?.first_name){
-
-      name=
-        profile.first_name+
-        " "+
-        (profile.last_name || "");
+    if(!name && profile?.display_name){
+      name=profile.display_name;
+    }
+    if(!name && profile?.first_name){
+      name=profile.first_name;
+    }
+    if(!name){
+      name="Mein Konto";
     }
 
     document.getElementById("welcome")
       .textContent=
         "Hallo "+name.trim()+" 👋";
-    if(trigger) trigger.textContent=name.trim() || user.email || "Mein Konto";
+    if(trigger) trigger.textContent=name.trim();
   }
 }
 
