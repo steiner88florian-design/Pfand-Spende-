@@ -613,6 +613,22 @@ padding:21px 17px 23px
 .find-details .coordinates{font-size:12px;color:var(--muted);overflow-wrap:anywhere}
 
 
+
+.map-legend .legend-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:12px}
+.legend-item{display:flex;align-items:center;gap:10px;min-width:0;font-size:13px}
+.legend-item small{display:block;color:var(--muted);font-size:11px;margin-top:3px}
+.legend-can,.legend-bottle{width:36px;height:52px;flex:0 0 36px;display:flex;align-items:center;justify-content:center}
+.legend-can svg,.legend-bottle svg{width:34px;height:52px;filter:drop-shadow(0 2px 2px #18382d20)}
+.legend-house{width:42px;height:42px;flex:0 0 42px;border:3px solid #fff;border-radius:13px;background:#ff9f1c;color:#fff;box-shadow:0 2px 7px #0003;display:grid;place-items:center;font-size:30px;font-weight:900;position:relative}
+.legend-house:before{content:"";position:absolute;inset:7px;background:#fff;border-radius:3px;z-index:0}
+.legend-house:after{content:"🏠";position:relative;z-index:1;font-size:23px}
+.leaflet-popup-content{margin:13px 14px;line-height:1.45}
+.pf-popup-title{font-size:16px;font-weight:800;margin-bottom:5px;color:#18382d}
+.pf-popup-muted{font-size:12px;color:#6b8379;margin:5px 0 10px}
+.pf-popup-actions{display:flex;flex-direction:column;gap:7px;margin-top:10px}
+.pf-popup-actions a,.pf-popup-actions button{display:block;text-align:center;padding:10px 12px;border-radius:11px;background:#27795f;color:white;text-decoration:none;font-weight:800;font-size:13px;border:0}
+.pf-popup-actions .light{background:#e4f4ed;color:#27795f}
+
 .legal-links{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:10px}
 .legal-links a{color:var(--green);text-decoration:underline;font-weight:700}
 .legal-screen p,.legal-screen li{font-size:14px;line-height:1.55;color:var(--muted)}
@@ -940,6 +956,15 @@ Die genaue Adresse wird nur für den Anbieter gespeichert und erst nach einer be
 
 </div>
 
+<div class="card map-legend" style="margin:10px 0;padding:14px">
+  <b>Symbole auf der Karte</b>
+  <div class="legend-grid">
+    <div class="legend-item"><span class="legend-can" aria-hidden="true"><svg viewBox="0 0 40 64"><ellipse cx="20" cy="9" rx="11" ry="5" fill="#b9c0c5" stroke="#65727b" stroke-width="1.5"/><path d="M9 9 L7 51 Q20 60 33 51 L31 9Z" fill="#e31d2b" stroke="#9c101b" stroke-width="1.5"/><ellipse cx="20" cy="51" rx="13" ry="5" fill="#c81724" stroke="#9c101b" stroke-width="1.5"/><ellipse cx="20" cy="9" rx="7" ry="2.5" fill="#e8ecef"/><path d="M14 18 Q20 14 26 18" fill="none" stroke="#ff9ba2" stroke-width="2"/></svg></span><span><b>Alu-Dose</b><small>draußen gefunden</small></span></div>
+    <div class="legend-item"><span class="legend-bottle" aria-hidden="true"><svg viewBox="0 0 40 64"><path d="M15 4h10v9l4 5q3 4 3 10v24q0 7-12 7T8 52V28q0-6 3-10l4-5Z" fill="#67b8ed" stroke="#2473a8" stroke-width="1.5"/><rect x="15" y="1" width="10" height="6" rx="1.5" fill="#2469a8"/><path d="M13 25 Q20 21 27 25v19q-7 4-14 0Z" fill="#d8f1ff" opacity=".72"/><path d="M14 19l-2 7v24q0 5 8 6" fill="none" stroke="#fff" stroke-width="2.5" opacity=".85"/></svg></span><span><b>Plastikflasche</b><small>draußen gefunden</small></span></div>
+    <div class="legend-item"><span class="legend-house" aria-hidden="true">⌂</span><span><b>Pfand-Angebot</b><small>zur Abholung</small></span></div>
+  </div>
+</div>
+
 <div class="map-note">
 
 🔐 <b>Privatsphäre zuerst:</b>
@@ -973,11 +998,11 @@ Pfand verschenken
     <div><p class="eyebrow">Fundort markieren</p><h2>Pfand markieren</h2></div>
   </div>
   <div class="card form">
-    <p class="find-form-note">Melde Pfand an einem öffentlichen, sicher zugänglichen Ort. Ein Konto ist nicht erforderlich. Bitte keine privaten Grundstücke betreten und keine gefährlichen Situationen riskieren.</p>
+    <p class="find-form-note">Melde Pfand, der draußen herumliegt. Dafür ist keine Abholanfrage nötig. Ein Haus-Symbol steht für ein eingestelltes Pfand-Angebot, bei dem eine Abholung angefragt werden kann.</p>
     <label for="findTitle">Was hast du gefunden?</label>
     <select id="findTitle" required>
-      <option value="Flaschen">Flaschen</option><option value="Dosen">Dosen</option>
-      <option value="Flaschen und Dosen">Flaschen und Dosen</option><option value="Unklar">Nicht sicher</option>
+      <option value="Dosen">Alu-Dosen</option><option value="Flaschen">Plastikflaschen</option>
+      <option value="Flaschen und Dosen">Dosen und Plastikflaschen</option><option value="Unklar">Nicht sicher</option>
     </select>
     <label for="findQuantity">Geschätzte Menge</label>
     <select id="findQuantity" required>
@@ -1009,7 +1034,7 @@ Pfand verschenken
       <input id="findSafetyAgree" type="checkbox" required style="width:auto;margin-top:3px">
       <span>Ich melde nach bestem Wissen einen tatsächlichen Fund und achte beim Sammeln auf meine Sicherheit.</span>
     </label>
-    <button class="primary" id="submitFindButton" onclick="submitFind()">📍 Fundstelle melden</button>
+    <button class="primary" id="submitFindButton" onclick="submitFind()">🥫 Pfand draußen markieren</button>
   </div>
   <div class="card" style="margin-top:12px">
     <b>Markierte Pfandorte</b>
@@ -1919,119 +1944,7 @@ async function renderOffers(){
     }
 
 
-    const isCan=
-      (offer.can_count||0)>
-      (offer.bottle_count||0);
-
-
-    const markerSvg=
-      isCan
-
-      ?`
-      <svg
-        width="48"
-        height="58"
-        viewBox="0 0 48 58"
-        xmlns="http://www.w3.org/2000/svg">
-
-        <ellipse
-          cx="24"
-          cy="55"
-          rx="14"
-          ry="3"
-          fill="#00000022"/>
-
-        <rect
-          x="10"
-          y="8"
-          width="28"
-          height="43"
-          rx="7"
-          fill="#d92f2f"
-          stroke="white"
-          stroke-width="4"/>
-
-        <ellipse
-          cx="24"
-          cy="9"
-          rx="14"
-          ry="5"
-          fill="#d9d9d9"
-          stroke="white"
-          stroke-width="3"/>
-
-        <ellipse
-          cx="24"
-          cy="9"
-          rx="9"
-          ry="2.5"
-          fill="#777"/>
-
-        <path
-          d="M15 30 C20 25 28 35 34 28"
-          fill="none"
-          stroke="white"
-          stroke-width="4"/>
-
-      </svg>
-      `
-
-      :`
-
-      <svg
-        width="48"
-        height="62"
-        viewBox="0 0 48 62"
-        xmlns="http://www.w3.org/2000/svg">
-
-        <ellipse
-          cx="24"
-          cy="59"
-          rx="13"
-          ry="3"
-          fill="#00000022"/>
-
-        <path
-          d="
-          M18 12
-          L18 7
-          Q18 4 21 4
-          L27 4
-          Q30 4 30 7
-          L30 12
-          Q36 16 37 23
-          L37 50
-          Q37 56 31 57
-          L17 57
-          Q11 56 11 50
-          L11 23
-          Q12 16 18 12Z
-          "
-          fill="#198c3a"
-          stroke="white"
-          stroke-width="4"/>
-
-        <path
-          d="
-          M17 27
-          Q24 23 31 27
-          L31 43
-          Q24 47 17 43Z
-          "
-          fill="#f4e5bd"
-          opacity=".95"/>
-
-        <rect
-          x="18"
-          y="3"
-          width="12"
-          height="6"
-          rx="2"
-          fill="#c49a45"/>
-
-      </svg>
-      `;
-
+    const markerSvg = pfandMarkerSvg("house");
 
     const marker=
       L.marker(
@@ -2055,10 +1968,10 @@ async function renderOffers(){
                 </div>`,
 
               iconSize:
-                [48,62],
+                [54,62],
 
               iconAnchor:
-                [24,62]
+                [27,62]
 
             })
         }
@@ -2081,10 +1994,8 @@ async function renderOffers(){
           margin-bottom:8px;
           ">
 
-          🍾 ${offer.bottle_count||0}
-          Flaschen ·
-          🥤 ${offer.can_count||0}
-          Dosen
+          🏠 Pfand-Angebot<br>
+          <span style="font-size:13px;font-weight:600">${offer.bottle_count||0} Flaschen · ${offer.can_count||0} Dosen</span>
 
         </div>
 
@@ -2120,14 +2031,62 @@ async function renderOffers(){
           font-weight:700;
           ">
 
-          Abholung anfragen
+          🏠 Abholung anfragen
 
         </button>
+        <div class="pf-popup-actions">
+          <a href="${pfandRouteUrl(offer.approx_lat,offer.approx_lng)}" target="_blank" rel="noopener">➤ Route starten</a>
+          <button class="light" onclick="pfandShare('Pfand-Angebot',${Number(offer.approx_lat)},${Number(offer.approx_lng)},'Ungefährer Abholbereich')">⇧ Angebot teilen</button>
+        </div>
 
       </div>
 
     `);
 
+  });
+  await renderFindMarkers();
+}
+
+function pfandMarkerSvg(type){
+  if(type === "house") return `<svg width="54" height="62" viewBox="0 0 54 62" xmlns="http://www.w3.org/2000/svg"><ellipse cx="27" cy="58" rx="15" ry="3" fill="#0003"/><path d="M4 26L27 5 50 26" fill="#f9a21b" stroke="white" stroke-width="4" stroke-linejoin="round"/><rect x="10" y="24" width="34" height="29" rx="4" fill="#fff" stroke="#e88a12" stroke-width="3"/><path d="M14 28L27 16 40 28" fill="#e3272e" stroke="#fff" stroke-width="2"/><rect x="22" y="35" width="10" height="18" rx="1" fill="#b8d9ee" stroke="#1c5e87" stroke-width="1.5"/><rect x="14" y="32" width="6" height="6" fill="#b8d9ee"/><rect x="34" y="32" width="6" height="6" fill="#b8d9ee"/></svg>`;
+  if(type === "can") return `<svg width="42" height="56" viewBox="0 0 42 56" xmlns="http://www.w3.org/2000/svg"><ellipse cx="21" cy="8" rx="12" ry="5" fill="#d9e0e4" stroke="#66737b" stroke-width="1.5"/><path d="M9 8L7 44Q21 54 35 44L33 8Z" fill="#e31d2b" stroke="#9c101b" stroke-width="1.5"/><ellipse cx="21" cy="44" rx="14" ry="5" fill="#c81724" stroke="#9c101b" stroke-width="1.5"/><ellipse cx="21" cy="8" rx="7" ry="2.5" fill="#eef1f3"/><path d="M14 17Q21 13 28 17" fill="none" stroke="#ff9ba2" stroke-width="2"/></svg>`;
+  return `<svg width="42" height="58" viewBox="0 0 42 58" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h10v8l4 5q3 4 3 10v22q0 7-12 7T9 49V27q0-6 3-10l4-5Z" fill="#66baf0" stroke="#2473a8" stroke-width="1.6"/><rect x="16" y="1" width="10" height="6" rx="1.5" fill="#2469a8"/><path d="M14 24Q21 20 28 24v18q-7 4-14 0Z" fill="#d8f1ff" opacity=".78"/><path d="M15 18l-2 8v22q0 5 8 6" fill="none" stroke="#fff" stroke-width="2.5" opacity=".85"/></svg>`;
+}
+function pfandDivIcon(type){
+  const svg=pfandMarkerSvg(type);
+  const width=type==="house"?54:42, height=type==="house"?62:58;
+  return L.divIcon({className:"",html:`<div style="filter:drop-shadow(0 3px 4px #18382d55)">${svg}</div>`,iconSize:[width,height],iconAnchor:[width/2,height]});
+}
+function pfandRouteUrl(lat,lng){return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(lat+","+lng)}&travelmode=walking`;}
+function pfandShare(itemType,lat,lng,label){
+  const url=pfandRouteUrl(lat,lng);
+  const text=`Pfand-Fundstelle: ${itemType}${label?" – "+label:""}\n${url}`;
+  if(navigator.share){navigator.share({title:"Pfand Finder – Fundstelle",text,url}).catch(()=>{});}
+  else if(navigator.clipboard){navigator.clipboard.writeText(text).then(()=>toast("Link zur Fundstelle kopiert."),()=>toast(text));}
+  else toast(text);
+}
+async function renderFindMarkers(){
+  if (!leafletMap || !supabaseClient) return;
+  const {data,error} = await supabaseClient.from("pfand_finds")
+    .select("id,item_type,quantity_estimate,description,location_label,latitude,longitude,status,photo_path,created_at")
+    .in("status", ["new", "collecting"]).limit(100);
+  if (error || !data) return;
+  data.forEach(item => {
+    const type = item.item_type === "Dosen" ? "can" : item.item_type === "Flaschen" ? "bottle" : "mixed";
+    const iconType = type === "can" ? "can" : "bottle";
+    const label = item.item_type === "Dosen" ? "Alu-Dose" : item.item_type === "Flaschen" ? "Plastikflasche" : item.item_type === "Flaschen und Dosen" ? "Dosen und Plastikflaschen" : "Pfandfund";
+    const marker = L.marker([item.latitude,item.longitude], {icon:pfandDivIcon(iconType)}).addTo(leafletMap);
+    const popupId = "find-popup-"+String(item.id).replace(/[^a-zA-Z0-9_-]/g,"");
+    marker.bindPopup(`<div style="min-width:210px;max-width:260px"><div style="display:flex;align-items:center;gap:10px"><span style="width:40px;height:48px;display:flex;align-items:center">${pfandMarkerSvg(iconType)}</span><div><div class="pf-popup-title">${safeFindText(label)}</div><div style="font-size:12px;color:#27795f;font-weight:800">Draußen gefunden</div></div></div><p style="margin:8px 0 4px"><b>Geschätzte Menge:</b> ${safeFindText(item.quantity_estimate || "Nicht angegeben")}</p><p style="margin:4px 0"><b>Ort:</b> ${safeFindText(item.location_label || "Ungefährer Kartenpunkt")}</p>${item.description?`<p style="margin:5px 0">${safeFindText(item.description)}</p>`:""}<div id="${popupId}"></div><div class="pf-popup-actions"><a href="${pfandRouteUrl(item.latitude,item.longitude)}" target="_blank" rel="noopener">➤ Route starten</a><button class="light" onclick="pfandShare('${safeFindText(label).replace(/'/g,"&#39;")}',${Number(item.latitude)},${Number(item.longitude)},'${safeFindText(item.location_label||"").replace(/'/g,"&#39;")}')">⇧ Fundstelle teilen</button></div><div class="pf-popup-muted">Keine Abholanfrage nötig. Bitte nur sammeln, wenn es sicher und erlaubt ist.</div></div>`);
+    marker.on("popupopen", async () => {
+      const target=document.getElementById(popupId);
+      if(!target || !item.photo_path || !supabaseClient) return;
+      target.textContent="Foto wird geladen …";
+      const {data:photoData,error:photoError}=await supabaseClient.storage.from(findPhotoBucket).createSignedUrl(item.photo_path,3600);
+      if(!target.isConnected) return;
+      if(photoError || !photoData?.signedUrl){target.textContent="Für diese Fundstelle ist kein Foto verfügbar.";return;}
+      target.innerHTML=`<img src="${photoData.signedUrl}" alt="Foto der Fundstelle" style="width:100%;max-height:160px;object-fit:cover;border-radius:10px;margin-top:8px">`;
+    });
   });
 }
 
@@ -2378,7 +2337,7 @@ async function submitFind() {
     toast("Danke! Der Pfandort wurde gespeichert.");
     await loadFinds();
   } catch(e) { toast(e.message || "Pfandort konnte nicht gespeichert werden."); }
-  finally { button.disabled=false; button.textContent="📍 Fundstelle melden"; }
+  finally { button.disabled=false; button.textContent="🥫 Pfand draußen markieren"; }
 }
 async function loadFinds() {
   const container = document.getElementById("findList");
