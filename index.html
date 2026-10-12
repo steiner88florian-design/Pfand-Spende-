@@ -599,6 +599,16 @@ padding:21px 17px 23px
 .pickup-send{background:var(--green);color:#fff}
 .pickup-send:disabled{opacity:.6}
 
+
+.find-form-note{font-size:12px;color:var(--muted);line-height:1.45}
+.find-map-pick{height:260px;border-radius:18px;overflow:hidden;border:1px solid var(--line);margin-top:8px}
+.find-status{display:inline-block;padding:5px 9px;border-radius:10px;background:#e4f4ed;color:#27795f;font-size:12px;font-weight:800}
+.find-list{display:grid;gap:10px;margin-top:14px}
+.find-item{background:#fff;border:1px solid var(--line);border-radius:17px;padding:14px}
+.find-item h3{font-size:16px;margin:0 0 6px}
+.find-item p{font-size:13px;line-height:1.4;color:var(--muted);margin:5px 0}
+.find-item button{background:#e4f4ed;color:#27795f;border-radius:10px;padding:9px 12px;font-weight:800;margin-top:7px}
+
 </style>
 </head>
 
@@ -634,7 +644,7 @@ padding:21px 17px 23px
 
 <div class="hero-content">
 
-<p class="eyebrow">Deutschland & Österreich</p>
+<p class="eyebrow">Deutschland · Österreich · Schweiz</p>
 
 <h1>
 Pfand finden.<br>
@@ -670,6 +680,13 @@ Einfach, sicher und von Mensch zu Mensch.
 </button>
 
 </div>
+
+
+      <button class="main-action give" onclick="show('reportFind')">
+        <span class="action-icon">📍</span>
+        <span><b>Pfandfund melden</b><small>Pfand in der Natur oder Stadt entdeckt – mit oder ohne Konto</small></span>
+        <span class="arrow">›</span>
+      </button>
 
 <div class="trust">
 <span class="trust-icon">🔐</span>
@@ -941,10 +958,54 @@ Pfand verschenken
 
 </section>
 
+
+<section id="reportFind" class="screen">
+  <div class="head">
+    <button class="back" onclick="show('home')">‹</button>
+    <div><p class="eyebrow">Fundstelle teilen</p><h2>Pfandfund melden</h2></div>
+  </div>
+  <div class="card form">
+    <p class="find-form-note">Melde Pfand an einem öffentlichen, sicher zugänglichen Ort. Ein Konto ist nicht erforderlich. Bitte keine privaten Grundstücke betreten und keine gefährlichen Situationen riskieren.</p>
+    <label for="findTitle">Was hast du gefunden?</label>
+    <select id="findTitle" required>
+      <option value="Flaschen">Flaschen</option><option value="Dosen">Dosen</option>
+      <option value="Flaschen und Dosen">Flaschen und Dosen</option><option value="Unklar">Nicht sicher</option>
+    </select>
+    <label for="findQuantity">Geschätzte Menge</label>
+    <select id="findQuantity" required>
+      <option value="Wenige (1–10)">Wenige (1–10)</option><option value="Mittel (11–30)">Mittel (11–30)</option>
+      <option value="Viele (mehr als 30)">Viele (mehr als 30)</option>
+    </select>
+    <label for="findDescription">Beschreibung (optional)</label>
+    <textarea id="findDescription" rows="3" maxlength="500" placeholder="z. B. am Weg neben einer Parkbank"></textarea>
+    <label for="findLocationText">Ort oder ungefähre Adresse</label>
+    <input id="findLocationText" placeholder="Straße, Park, Ort oder Treffpunkt" required>
+    <button type="button" class="secondary" onclick="locateFindText()">📍 Ort auf Karte finden</button>
+    <div id="findPickMap" class="find-map-pick"></div>
+    <p class="find-form-note">Tippe auf die Karte, um den ungefähren Fundort festzulegen. Bitte keine privaten Wohnadressen melden.</p>
+    <label for="findPhoto">Foto (optional)</label>
+    <input id="findPhoto" type="file" accept="image/*" capture="environment">
+    <p class="find-form-note">Bitte keine erkennbaren Gesichter oder Kennzeichen fotografieren. Maximal 5 MB.</p>
+    <label for="findReporter">Name (optional)</label>
+    <input id="findReporter" maxlength="60" placeholder="Anzeigename – optional">
+    <label class="choice" style="display:flex;gap:9px;align-items:flex-start">
+      <input id="findSafetyAgree" type="checkbox" required style="width:auto;margin-top:3px">
+      <span>Ich melde nach bestem Wissen einen tatsächlichen Fund und achte beim Sammeln auf meine Sicherheit.</span>
+    </label>
+    <button class="primary" id="submitFindButton" onclick="submitFind()">📍 Fundstelle melden</button>
+  </div>
+  <div class="card" style="margin-top:12px">
+    <b>Aktuelle Fundmeldungen</b>
+    <p class="find-form-note">Fundmeldungen sind ungeprüfte Nutzerangaben. Prüfe vor dem Losgehen, ob die Stelle noch aktuell und sicher zugänglich ist.</p>
+    <button class="secondary" onclick="loadFinds()">Fundmeldungen aktualisieren</button>
+    <div id="findList" class="find-list"></div>
+  </div>
+</section>
+
 </main>
 
 <footer>
-♻ Pfand Finder · Mitmachen · Helfen · Teilen
+♻ Pfand Finder · Gemeinsam Gutes tun · Deutschland · Österreich · Schweiz
 </footer>
 
 
@@ -980,7 +1041,121 @@ Pfand verschenken
 
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+/* PFAND-FUND-MELDUNGEN – benötigt die beiliegende Supabase-SQL-Migration. */
+let findMap = null, findMarker = null, findCoordinates = null;
+const findPhotoBucket = "pfand-find-photos";
+
+function initFindMap() {
+  if (typeof L === "undefined") { toast("Die Karte konnte nicht geladen werden."); return; }
+  if (findMap) { setTimeout(() => findMap.invalidateSize(), 100); return; }
+  findMap = L.map("findPickMap").setView([47.5, 10.5], 5);
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: "© OpenStreetMap contributors"
+  }).addTo(findMap);
+  findMap.on("click", e => setFindMarker(e.latlng.lat, e.latlng.lng));
+}
+function setFindMarker(lat, lng) {
+  findCoordinates = {lat:Number(lat), lng:Number(lng)};
+  if (findMarker) findMarker.remove();
+  findMarker = L.marker([lat,lng]).addTo(findMap).bindPopup("Ungefährer Fundort").openPopup();
+}
+async function locateFindText() {
+  const text = document.getElementById("findLocationText").value.trim();
+  if (!text) { toast("Bitte zuerst einen Ort eingeben."); return; }
+  try {
+    const url = "https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&countrycodes=de,at,ch&q=" + encodeURIComponent(text);
+    const response = await fetch(url, {headers:{"Accept-Language":"de"}});
+    if (!response.ok) throw new Error();
+    const results = await response.json();
+    if (!results.length) { toast("Ort nicht gefunden. Bitte auf der Karte tippen."); return; }
+    initFindMap();
+    const lat = Number(results[0].lat), lng = Number(results[0].lon);
+    findMap.setView([lat,lng],15); setFindMarker(lat,lng);
+  } catch(e) { toast("Ortssuche fehlgeschlagen. Bitte Fundort auf der Karte markieren."); }
+}
+function safeFindText(v) {
+  return String(v ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+async function submitFind() {
+  if (!supabaseClient) { toast("Die Datenbank ist noch nicht verbunden."); return; }
+  if (!findCoordinates) { toast("Bitte den Fundort auf der Karte markieren."); return; }
+  if (!document.getElementById("findSafetyAgree").checked) { toast("Bitte bestätige den Sicherheitshinweis."); return; }
+  const button = document.getElementById("submitFindButton");
+  button.disabled = true; button.textContent = "Meldung wird gespeichert …";
+  let uploadedPath = null;
+  try {
+    const {data:authData} = await supabaseClient.auth.getUser();
+    const user = authData?.user || null;
+    const payload = {
+      reporter_id:user?.id || null,
+      reporter_name:document.getElementById("findReporter").value.trim() || null,
+      item_type:document.getElementById("findTitle").value,
+      quantity_estimate:document.getElementById("findQuantity").value,
+      description:document.getElementById("findDescription").value.trim() || null,
+      location_label:document.getElementById("findLocationText").value.trim() || null,
+      latitude:findCoordinates.lat, longitude:findCoordinates.lng, status:"new"
+    };
+    const file = document.getElementById("findPhoto").files?.[0];
+    if (file) {
+      if (!file.type.startsWith("image/")) throw new Error("Bitte eine Bilddatei auswählen.");
+      if (file.size > 5*1024*1024) throw new Error("Das Foto darf höchstens 5 MB groß sein.");
+      uploadedPath = crypto.randomUUID() + "-" + (file.name || "foto").replace(/[^a-zA-Z0-9._-]/g,"_");
+      const {error:upErr} = await supabaseClient.storage.from(findPhotoBucket).upload(uploadedPath,file,{contentType:file.type,upsert:false});
+      if (upErr) throw new Error("Foto-Speicher noch nicht eingerichtet. Sende die Meldung ohne Foto oder richte den Speicher ein.");
+      payload.photo_path = uploadedPath;
+    }
+    const {error} = await supabaseClient.from("pfand_finds").insert(payload);
+    if (error) {
+      if (uploadedPath) await supabaseClient.storage.from(findPhotoBucket).remove([uploadedPath]);
+      throw error;
+    }
+    ["findDescription","findLocationText","findPhoto","findReporter"].forEach(id => document.getElementById(id).value = "");
+    document.getElementById("findSafetyAgree").checked = false;
+    findCoordinates = null; if (findMarker) {findMarker.remove();findMarker=null;}
+    toast("Danke! Deine Fundmeldung wurde gespeichert.");
+    await loadFinds();
+  } catch(e) { toast(e.message || "Fundmeldung konnte nicht gespeichert werden."); }
+  finally { button.disabled=false; button.textContent="📍 Fundstelle melden"; }
+}
+async function loadFinds() {
+  const container = document.getElementById("findList");
+  if (!container || !supabaseClient) { if(container) container.textContent="Datenbank nicht verbunden."; return; }
+  container.textContent = "Fundmeldungen werden geladen …";
+  const {data,error} = await supabaseClient.from("pfand_finds")
+    .select("id,item_type,quantity_estimate,description,location_label,latitude,longitude,status,created_at")
+    .in("status",["new","collecting"]).order("created_at",{ascending:false}).limit(100);
+  if (error) { container.textContent="Fundmeldungen konnten nicht geladen werden. Bitte zuerst die SQL-Datei in Supabase ausführen."; return; }
+  if (!data?.length) { container.textContent="Noch keine Fundmeldungen. Du kannst die erste Fundstelle eintragen."; return; }
+  container.innerHTML = "";
+  data.forEach(item => {
+    const el = document.createElement("article"); el.className="find-item";
+    const date = item.created_at ? new Date(item.created_at).toLocaleDateString("de-DE") : "";
+    el.innerHTML = `<h3>📍 ${safeFindText(item.item_type || "Pfandfund")}</h3>
+      <span class="find-status">${item.status==="collecting"?"Wird gesammelt":"Neu"}</span>
+      <p><b>Menge:</b> ${safeFindText(item.quantity_estimate || "Nicht angegeben")}</p>
+      <p><b>Ort:</b> ${safeFindText(item.location_label || "Ungefährer Kartenpunkt")}</p>
+      ${item.description?`<p>${safeFindText(item.description)}</p>`:""}<p>Gemeldet: ${safeFindText(date)}</p>
+      <button type="button">Fundort auf Karte anzeigen</button>`;
+    el.querySelector("button").addEventListener("click", () => {
+      show("find"); setTimeout(() => {
+        if (leafletMap) {
+          leafletMap.setView([item.latitude,item.longitude],16);
+          L.marker([item.latitude,item.longitude]).addTo(leafletMap)
+            .bindPopup(`<b>${safeFindText(item.item_type)}</b><br>${safeFindText(item.quantity_estimate)}<br>${safeFindText(item.location_label || "")}`).openPopup();
+        }
+      },250);
+    });
+    container.appendChild(el);
+  });
+}
+const originalShowForFinds = show;
+show = function(id) {
+  originalShowForFinds(id);
+  if (id==="reportFind") setTimeout(() => {initFindMap();loadFinds();},150);
+};
+
+</script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 const SUPABASE_URL="https://rjtkjesefcxaeftfftus.supabase.co";
@@ -1288,7 +1463,7 @@ async function geocodeApprox(
     "https://nominatim.openstreetmap.org/search"+
     "?format=jsonv2"+
     "&limit=1"+
-    "&countrycodes=de,at"+
+    "&countrycodes=de,at,ch"+
     "&q="+query;
 
   try{
