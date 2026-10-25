@@ -1227,7 +1227,7 @@ Pfand verschenken
       <p class="auth-note">Bitte keine Passwörter oder besonders sensiblen Daten senden.</p>
       <button class="primary" type="submit" id="operatorSendButton">Nachricht senden</button>
     </form>
-    <div id="operatorContactNote" class="auth-note">Das Kontaktformular speichert deine Nachricht im Pfand-Finder-Postfach und benötigt eine Anmeldung. Es versendet derzeit nicht automatisch eine E-Mail-Benachrichtigung. Alternativ kannst du direkt an <a href="mailto:pfand.finder@gmx.net">pfand.finder@gmx.net</a> schreiben.</div>
+    <div id="operatorContactNote" class="auth-note">Das Kontaktformular speichert deine Nachricht im Pfand-Finder-Postfach und sendet zusätzlich eine E-Mail-Benachrichtigung. Dafür muss die Supabase-Funktion <code>send-contact-email</code> eingerichtet und die Absenderdomain bei Resend verifiziert sein. Alternativ kannst du direkt an <a href="mailto:pfand.finder@gmx.net">pfand.finder@gmx.net</a> schreiben.</div>
   </div>
 </section>
 </main>
@@ -2099,11 +2099,27 @@ async function sendOperatorMessage(event){
   if(userError||!user){toast("Bitte zuerst anmelden, damit wir dir antworten können.");show("account");return;}
   const button=document.getElementById("operatorSendButton");button.disabled=true;button.textContent="Wird gesendet …";
   try{
-    const {error}=await supabaseClient.from("support_messages").insert({user_id:user.id,topic:document.getElementById("operatorTopic").value,subject:document.getElementById("operatorSubject").value.trim(),message:document.getElementById("operatorBody").value.trim(),status:"new"});
+    const topic=document.getElementById("operatorTopic").value;
+    const subject=document.getElementById("operatorSubject").value.trim();
+    const message=document.getElementById("operatorBody").value.trim();
+    const {error}=await supabaseClient.from("support_messages").insert({user_id:user.id,topic,subject,message,status:"new"});
     if(error)throw error;
+
+    // Die Nachricht bleibt auch dann im Postfach gespeichert, wenn die E-Mail-Konfiguration noch fehlt.
+    let emailNoticeSent=false;
+    try{
+      const {error:emailError}=await supabaseClient.functions.invoke("send-contact-email",{
+        body:{name:(user.email||"Pfand-Finder-Nutzer").split("@")[0],email:user.email||"",message:`Thema: ${topic}\nBetreff: ${subject}\n\n${message}`}
+      });
+      if(emailError){console.error("E-Mail-Benachrichtigung fehlgeschlagen:",emailError);}
+      else{emailNoticeSent=true;}
+    }catch(emailErr){console.error("E-Mail-Benachrichtigung fehlgeschlagen:",emailErr);}
+
     document.getElementById("operatorSubject").value="";document.getElementById("operatorBody").value="";document.getElementById("operatorTopic").value="";
-    toast("Nachricht wurde im Pfand-Finder-Postfach gespeichert.");show("messages");loadMyMessages();
-  }catch(err){toast("Nachricht konnte nicht gesendet werden. Bitte prüfe die Supabase-SQL-Einrichtung.");console.error(err);}
+    if(emailNoticeSent){toast("Nachricht gespeichert und E-Mail-Benachrichtigung versendet.");}
+    else{toast("Nachricht gespeichert. E-Mail-Benachrichtigung noch nicht verfügbar – bitte Domain und Supabase-Funktion prüfen.");}
+    show("messages");loadMyMessages();
+  }catch(err){toast("Nachricht konnte nicht gespeichert werden. Bitte prüfe die Supabase-SQL-Einrichtung.");console.error(err);}
   finally{button.disabled=false;button.textContent="Nachricht senden";}
 }
 async function loadMyMessages(){
