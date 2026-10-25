@@ -1139,36 +1139,72 @@ Pfand verschenken
 <section id="privacyInfo" class="screen legal-screen">
   <div class="head"><button class="back" onclick="show('home')">‹</button><div><p class="eyebrow">Rechtliches</p><h2>Datenschutz</h2></div></div>
   <div class="card">
-    <div class="legal-warning"><b>Entwurf – vor Veröffentlichung vervollständigen.</b> Diese Seite ist noch keine vollständige Datenschutzerklärung. Betreiberkontakt, tatsächliche Datenflüsse, Speicherfristen und eingesetzte Dienste müssen geprüft und ergänzt werden.</div>
-    <h3>Welche Daten verarbeitet werden können</h3>
-    <p>Je nach Nutzung können Kontodaten, E-Mail-Adresse, Pfandangebote, Fundorte, freiwillig hochgeladene Fotos sowie technische Verbindungsdaten verarbeitet werden. Fundorte und Fotos bitte nur mit den nötigen Angaben einreichen.</p>
-    <h3>Externe Dienste</h3>
-    <p>Die App verwendet Supabase für Anmeldung und Datenspeicherung, OpenStreetMap-Karten und eine Ortssuche über Nominatim. Vor dem Start müssen die tatsächlichen Datenverarbeitungen und Rechtsgrundlagen geprüft werden.</p>
-    <h3>Kontakt und Rechte</h3>
-    <p>Hier müssen Betreibername, Kontaktadresse sowie ein Weg für Auskunfts- und Löschanfragen ergänzt werden.</p>
+    <div class="legal-warning"><b>Datenschutz-Entwurf – vor Veröffentlichung fachkundig prüfen.</b> Dieser Text ist an den derzeit bekannten Funktionen ausgerichtet, aber noch keine abschließend geprüfte Datenschutzerklärung. Insbesondere Werbeanbieter, tatsächliche Datenflüsse, Rechtsgrundlagen, Speicherfristen, Hosting-/Auftragsverarbeitungsverträge und Cookie-/Einwilligungstechnik müssen anhand der Live-Version verifiziert werden. Werbung darf erst nach korrekter Umsetzung erforderlicher Einwilligungen aktiviert werden.</div>
+    <h3>1. Verantwortlicher</h3>
+    <p>Florian Steiner<br>Gablonzer Str. 17<br>87656 Germaringen<br>Deutschland</p>
+    <p>E-Mail: <a href="mailto:pfand.finder@gmx.net">pfand.finder@gmx.net</a></p>
+    <p>Datenschutzanfragen können an die oben genannte E-Mail-Adresse gerichtet werden.</p>
+    <h3>2. Welche Daten verarbeitet werden können</h3>
+    <p>Je nach den genutzten Funktionen können insbesondere Anmeldename, E-Mail-Adresse, Vor- und Nachname, Telefonnummer, vom Nutzer eingegebene Anschrift, Kontoinformationen, Pfandanzeigen, Fundort- bzw. Standortangaben, hochgeladene Fotos sowie technische Verbindungs- und Nutzungsdaten verarbeitet werden. Welche Daten tatsächlich erhoben werden, muss mit der veröffentlichten Version abgeglichen werden.</p>
+    <h3>3. Zwecke und Rechtsgrundlagen</h3>
+    <p>Daten können verarbeitet werden, um Nutzerkonten bereitzustellen, Anmeldungen zu ermöglichen, Pfandanzeigen zu veröffentlichen, Kontakte bzw. Übergaben zwischen Nutzern zu ermöglichen, Missbrauch und Sicherheitsprobleme zu bearbeiten sowie gesetzliche Pflichten zu erfüllen. Für jede Verarbeitung muss vor dem Start die passende Rechtsgrundlage nach Art. 6 DSGVO festgelegt und dokumentiert werden. Nicht erforderliche Verarbeitungen dürfen nicht pauschal als notwendig bezeichnet werden.</p>
+    <h3>4. Sichtbarkeit von Profilen, Anschriften und Standorten</h3>
+    <p>Private Anschriften, Telefonnummern und andere Kontodaten sollen nicht öffentlich angezeigt werden, sofern dies nicht ausdrücklich erforderlich und rechtlich geprüft ist. Für öffentliche Fundorte sollte möglichst nur ein Ort oder eine ungefähre Position verwendet werden. Vor Veröffentlichung muss technisch getestet werden, welche Profilfelder und Standortdaten tatsächlich für andere Nutzer sichtbar sind.</p>
+    <h3>5. Fotos und Inhalte von Nutzern</h3>
+    <p>Wenn Nutzer Fotos oder Anzeigen hochladen, können diese zur Anzeige der jeweiligen Pfandmeldung gespeichert und anderen Nutzern zugänglich gemacht werden. Nutzer sollten keine unnötigen persönlichen Informationen hochladen. Vor dem Start ist zu prüfen, wie lange Fotos gespeichert werden, wie sie gelöscht werden und ob Bilddateien Standort- oder andere Metadaten enthalten.</p>
+    <h3>6. Hosting, Anmeldung und externe Dienste</h3>
+    <p>Nach der derzeitigen technischen Planung wird Supabase für Anmeldung und Datenspeicherung verwendet. Außerdem sind OpenStreetMap-Karten und eine Ortssuche über Nominatim im Code bzw. Konzept vorgesehen. Vor Veröffentlichung müssen die tatsächlich eingebundenen Dienste, deren Anbieter, übermittelte Daten, Speicherorte, Auftragsverarbeitungsverträge und mögliche Drittlandübermittlungen geprüft und korrekt beschrieben werden. Ein Dienst darf hier nur genannt werden, wenn er in der Live-Version tatsächlich genutzt wird.</p>
+    <h3>7. Werbung und Einwilligungen</h3>
+    <p>Für die geplante Werbung ist vor Aktivierung festzustellen, welcher Werbeanbieter eingesetzt wird und ob Cookies, lokale Speichertechnologien oder andere Zugriffe auf Endgeräte stattfinden. Soweit eine Einwilligung erforderlich ist, muss sie vor dem entsprechenden Zugriff eingeholt werden; Ablehnen muss ebenso einfach möglich sein wie Zustimmen. Die Datenschutzerklärung muss anschließend den tatsächlichen Anbieter, Zwecke, Datenempfänger, Speicherdauer und Widerrufsmöglichkeiten benennen. Bis diese Prüfung und Umsetzung erfolgt ist, keine Werbe- oder Tracking-Skripte aktivieren, die eine vorherige Einwilligung erfordern.</p>
+    <h3>8. Speicherdauer und Löschung</h3>
+    <p>Personenbezogene Daten sollen nur so lange gespeichert werden, wie es für den jeweiligen Zweck erforderlich ist oder gesetzliche Aufbewahrungspflichten bestehen. Konkrete Fristen für Konten, Anzeigen, Fotos, Sicherheitsprotokolle und Sicherungskopien müssen vor dem Start festgelegt werden. Außerdem muss der Kontolöschungsprozess technisch geprüft werden; das Löschen eines Kontos muss nicht automatisch bedeuten, dass sämtliche Sicherungskopien sofort entfernt sind.</p>
+    <h3>9. Rechte betroffener Personen</h3>
+    <p>Betroffene Personen können nach Maßgabe der gesetzlichen Voraussetzungen insbesondere Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit und Widerspruch verlangen. Einwilligungen können mit Wirkung für die Zukunft widerrufen werden. Anfragen können an die oben genannte E-Mail-Adresse gerichtet werden. Außerdem besteht das Recht, sich bei einer zuständigen Datenschutzaufsichtsbehörde zu beschweren.</p>
+    <h3>10. Cookies und lokale Speicherung</h3>
+    <p>Vor Veröffentlichung ist zu prüfen, ob die Website Cookies, lokalen Speicher, Analysewerkzeuge, Karten oder andere externe Inhalte lädt. Die Erklärung und gegebenenfalls eine Einwilligungsverwaltung müssen exakt der technischen Umsetzung entsprechen.</p>
+    <h3>11. Änderungen</h3>
+    <p>Diese Datenschutzhinweise müssen aktualisiert werden, wenn sich Funktionen, Dienstleister, Werbetechnik oder Datenverarbeitungen ändern.</p>
   </div>
 </section>
 <section id="termsInfo" class="screen legal-screen">
   <div class="head"><button class="back" onclick="show('home')">‹</button><div><p class="eyebrow">Rechtliches</p><h2>Nutzungsbedingungen</h2></div></div>
   <div class="card">
-    <div class="legal-warning"><b>Entwurf – rechtlich prüfen lassen.</b> Diese Hinweise ersetzen keine vollständigen, rechtlich geprüften Nutzungsbedingungen für Deutschland und Österreich.</div>
-    <ul>
-      <li>Fundmeldungen sind Angaben von Nutzern und werden nicht automatisch vor Ort überprüft.</li>
-      <li>Keine privaten Grundstücke ohne Erlaubnis betreten und keine gefährlichen Situationen riskieren.</li>
-      <li>Keine rechtswidrigen Inhalte, fremden personenbezogenen Daten oder Fotos erkennbarer Personen ohne geeignete Rechtsgrundlage veröffentlichen.</li>
-      <li>Falsche, gefährliche oder missbräuchliche Einträge können gemeldet und nach Prüfung verborgen werden.</li>
-    </ul>
-    <p>Vor Veröffentlichung müssen Regeln zu Konten, Meldungen, Moderation, Löschung, Haftung und Kontakt ergänzt und geprüft werden.</p>
+    <div class="legal-warning"><b>Entwurf – vor Veröffentlichung rechtlich prüfen lassen.</b> Die folgenden Regeln sind eine Arbeitsfassung für Deutschland und Österreich. Insbesondere DSA-Pflichten, Verbraucher-/Vertragsfragen, Haftung und Moderationsverfahren hängen von der konkreten Ausgestaltung ab.</div>
+    <h3>1. Zweck der Plattform</h3>
+    <p>Pfand Finder („Gemeinsam Gutes tun“) soll Nutzern ermöglichen, Pfandangebote bzw. Fundmeldungen einzustellen, Fundorte zu finden und freiwillige Übergaben miteinander abzusprechen. Sofern die Plattform nicht ausdrücklich selbst als Beteiligte auftritt, organisiert sie nicht selbst die Rücknahme von Verpackungen und garantiert weder die Richtigkeit einer Meldung noch eine erfolgreiche Übergabe.</p>
+    <h3>2. Nutzerkonten</h3>
+    <p>Nutzer müssen bei der Registrierung korrekte Angaben machen, Zugangsdaten schützen und dürfen sich nicht als andere Personen ausgeben. Kontaktdaten und private Anschriften sollen nur angegeben werden, soweit die jeweilige Funktion sie benötigt. Zugangsdaten dürfen nicht an andere weitergegeben werden.</p>
+    <h3>3. Anzeigen und Fotos</h3>
+    <p>Nutzer sind für die von ihnen eingestellten Texte, Fotos, Standortangaben und sonstigen Inhalte verantwortlich. Inhalte dürfen nicht rechtswidrig, betrügerisch, irreführend oder beleidigend sein und keine Rechte Dritter verletzen. Nutzer dürfen nur Bilder hochladen, für deren Verwendung und Veröffentlichung sie die erforderlichen Rechte und Rechtsgrundlagen besitzen.</p>
+    <h3>4. Sicherheit und Übergaben</h3>
+    <p>Übergaben werden freiwillig zwischen den Nutzern vereinbart. Treffpunkt, Zeitpunkt und Umfang sollten vorher geklärt werden. Keine privaten Grundstücke ohne Erlaubnis betreten, keine gefährlichen Situationen eingehen und keine unnötigen persönlichen Daten öffentlich machen. Nutzer sollten möglichst sichere, öffentliche Treffpunkte wählen.</p>
+    <h3>5. Verbotene Nutzung</h3>
+    <p>Untersagt sind insbesondere falsche oder betrügerische Anzeigen, Spam, Belästigung, Drohungen, rechtswidrige Inhalte, die Veröffentlichung fremder personenbezogener Daten ohne ausreichende Rechtsgrundlage sowie der unbefugte Zugriff auf Konten oder Daten.</p>
+    <h3>6. Meldung rechtswidriger Inhalte und Moderation</h3>
+    <p>Problematische Inhalte sollen über [MELDEFUNKTION ODER PROJEKT-E-MAIL EINTRAGEN] gemeldet werden können. Vor dem Start muss ein leicht zugängliches elektronisches Meldeverfahren eingerichtet und getestet werden. Meldungen sind nach den anwendbaren gesetzlichen Pflichten zu bearbeiten; gegebenenfalls müssen Empfang, Entscheidung und Begründung kommuniziert werden. Regeln für Sperrungen, Löschungen und Beschwerden sind vor Veröffentlichung festzulegen.</p>
+    <h3>7. Kosten und Werbung</h3>
+    <p>Die grundlegenden Funktionen sollen kostenlos sein. Die Plattform kann gekennzeichnete Werbeanzeigen enthalten. Werbung darf die Nutzer nicht über ihren Charakter täuschen. Ob und welche Werbedienste eingesetzt werden, wird in den Datenschutzhinweisen beschrieben. Ein Anspruch auf jederzeitige Werbefreiheit besteht nur, wenn dies ausdrücklich zugesagt wird.</p>
+    <h3>8. Verfügbarkeit und Änderungen</h3>
+    <p>Der Betreiber bemüht sich um einen zuverlässigen Betrieb, kann jedoch keine ununterbrochene Verfügbarkeit garantieren. Wartung und technische Störungen können zu Unterbrechungen führen. Wesentliche Änderungen der Bedingungen müssen in geeigneter Weise mitgeteilt werden, soweit gesetzlich erforderlich.</p>
+    <h3>9. Haftung</h3>
+    <p>Es gelten die gesetzlichen Haftungsregeln. Diese Bedingungen schließen keine Haftung aus, soweit ein Ausschluss gesetzlich unzulässig ist. Ein pauschaler Ausschluss jeglicher Verantwortung wird nicht erklärt.</p>
+    <h3>10. Kontakt</h3>
+    <p>Kontakt: <a href="mailto:pfand.finder@gmx.net">pfand.finder@gmx.net</a>. Vor dem öffentlichen Start sind die Kontaktdaten, Meldewege und gegebenenfalls gesetzlich erforderlichen Informationen zu ergänzen.</p>
   </div>
 </section>
 <section id="imprintInfo" class="screen legal-screen">
   <div class="head"><button class="back" onclick="show('home')">‹</button><div><p class="eyebrow">Rechtliches</p><h2>Impressum</h2></div></div>
   <div class="card">
-    <div class="legal-warning"><b>Pflichtangaben fehlen noch.</b> Bitte nicht als fertiges Impressum betrachten.</div>
-    <p><b>Betreiber:</b> [Vollständiger Name ergänzen]</p>
-    <p><b>Postanschrift:</b> [Zustellfähige Anschrift ergänzen]</p>
-    <p><b>Kontakt:</b> [E-Mail-Adresse ergänzen]</p>
-    <p>Vor dem öffentlichen Start prüfen, welche Anbieterangaben in Deutschland und Österreich für deinen konkreten Betrieb erforderlich sind.</p>
+    <div class="legal-warning"><b>Entwurf – rechtlich noch prüfen lassen.</b> Bitte vor dem öffentlichen Start prüfen lassen, ob aufgrund der konkreten Nutzung, Werbung und Veröffentlichung weitere Angaben nach deutschem bzw. österreichischem Recht erforderlich sind.</div>
+    <h3>Angaben gemäß den anwendbaren Anbieterkennzeichnungspflichten</h3>
+    <p><b>Betreiber:</b><br>Florian Steiner</p>
+    <p><b>Anschrift:</b><br>Gablonzer Str. 17<br>87656 Germaringen<br>Deutschland</p>
+    <p><b>Kontakt:</b><br>E-Mail: <a href="mailto:pfand.finder@gmx.net">pfand.finder@gmx.net</a></p>
+    <h3>Über Pfand Finder</h3>
+    <p>Pfand Finder („Gemeinsam Gutes tun“) ist ein Online-Angebot, das Nutzern ermöglicht, Pfandangebote und Fundmeldungen einzustellen und freiwillige Übergaben miteinander abzusprechen.</p>
+    <h3>Inhalte und Meldungen</h3>
+    <p>Hinweise auf möglicherweise rechtswidrige Inhalte können an die oben genannte Kontakt-E-Mail gesendet werden. Für das Angebot und die Bearbeitung solcher Meldungen müssen die anwendbaren gesetzlichen Pflichten beachtet werden.</p>
+    <p><b>Vor Veröffentlichung prüfen:</b> Ob zusätzliche Angaben nach deutschem Medienrecht bzw. österreichischem Mediengesetz, weitere Kontaktinformationen oder Angaben wegen der konkreten Werbe- und Plattformfunktionen erforderlich sind. Eine Telefonnummer wird hier nicht erfunden oder ergänzt, solange keine Kontakttelefonnummer festgelegt wurde.</p>
   </div>
 </section>
 
@@ -1182,6 +1218,7 @@ Pfand verschenken
   <div class="head"><button class="back" onclick="show('home')">‹</button><div><p class="eyebrow">Wir helfen gerne</p><h2>Kontakt</h2></div></div>
   <div class="card">
     <p>Hast du eine Frage, ein Problem oder einen Verbesserungsvorschlag? Schreib uns direkt hier.</p>
+    <p>Du kannst uns auch direkt per E-Mail erreichen: <a href="mailto:pfand.finder@gmx.net?subject=Pfand%20Finder%20Kontakt">pfand.finder@gmx.net</a></p>
     <form class="auth-form" onsubmit="sendOperatorMessage(event)">
       <label for="operatorTopic">Worum geht es?</label>
       <select id="operatorTopic" required><option value="">Bitte auswählen</option><option>Technisches Problem</option><option>Fundstelle melden</option><option>Frage zu meinem Konto</option><option>Feedback und Vorschlag</option><option>Datenschutzanfrage</option><option>Sonstiges</option></select>
@@ -1190,7 +1227,7 @@ Pfand verschenken
       <p class="auth-note">Bitte keine Passwörter oder besonders sensiblen Daten senden.</p>
       <button class="primary" type="submit" id="operatorSendButton">Nachricht senden</button>
     </form>
-    <div id="operatorContactNote" class="auth-note">Für das Senden ist ein angemeldetes Konto erforderlich, damit wir dir antworten können.</div>
+    <div id="operatorContactNote" class="auth-note">Das Kontaktformular speichert deine Nachricht im Pfand-Finder-Postfach und benötigt eine Anmeldung. Es versendet derzeit nicht automatisch eine E-Mail-Benachrichtigung. Alternativ kannst du direkt an <a href="mailto:pfand.finder@gmx.net">pfand.finder@gmx.net</a> schreiben.</div>
   </div>
 </section>
 </main>
@@ -2065,7 +2102,7 @@ async function sendOperatorMessage(event){
     const {error}=await supabaseClient.from("support_messages").insert({user_id:user.id,topic:document.getElementById("operatorTopic").value,subject:document.getElementById("operatorSubject").value.trim(),message:document.getElementById("operatorBody").value.trim(),status:"new"});
     if(error)throw error;
     document.getElementById("operatorSubject").value="";document.getElementById("operatorBody").value="";document.getElementById("operatorTopic").value="";
-    toast("Nachricht wurde an den Betreiber gesendet.");show("messages");loadMyMessages();
+    toast("Nachricht wurde im Pfand-Finder-Postfach gespeichert.");show("messages");loadMyMessages();
   }catch(err){toast("Nachricht konnte nicht gesendet werden. Bitte prüfe die Supabase-SQL-Einrichtung.");console.error(err);}
   finally{button.disabled=false;button.textContent="Nachricht senden";}
 }
